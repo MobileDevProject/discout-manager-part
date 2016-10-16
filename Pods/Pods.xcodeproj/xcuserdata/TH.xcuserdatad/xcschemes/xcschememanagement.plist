@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>Pods-disCout.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-disCoutTests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Pods-disCoutUITests.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>SDWebImage.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>00F6E4F307E4AB2A118B533D5583B9B2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3AA994F5FF094CE167FCB4B29EC3B313</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>45AE51C1A1C2E7B4006B6379B6657629</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E415A813E6CBDDC1E152B8C00902766D</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>
