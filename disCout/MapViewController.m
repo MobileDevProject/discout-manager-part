@@ -15,27 +15,41 @@
 #import "SWRevealViewController.h"
 #import "AppDelegate.h"
 #import "Annotation.h"
+
+
 @interface MapViewController ()<MKMapViewDelegate,CLLocationManagerDelegate> {
     NSMutableArray *arrRestaurantData;
     float preValue;
     UIViewController *previousController;
     NSMutableArray *annotations;
+    Boolean checkMyLocation;
 }
 #define METERS_PER_MILE 1609.344
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property(nonatomic,strong) CLLocationManager *locationManager;
 @property BOOL mapDidLoadForFirstTime;
-@property (nonatomic,retain) AppDelegate *app;
+@property (nonatomic,retain) AppDelegate * app;
 @end
 
 @implementation MapViewController
 @synthesize mapView;
-
+@synthesize locationManager = _locationManager;
 - (void)viewDidLoad{
-
-    self.locationManager = [[CLLocationManager alloc] init];
-    _app = [UIApplication sharedApplication].delegate;
+    checkMyLocation = YES;
+    mapView.delegate =self;
+    [self.locationManager requestWhenInUseAuthorization];
+    [self.locationManager startUpdatingLocation];
+    
+    self.mapView.delegate = self;
+    self.mapView.showsBuildings = NO;
+    self.mapView.pitchEnabled = YES;
+    self.mapView.zoomEnabled = YES;
+    self.mapView.rotateEnabled = YES;
+    self.mapView.showsUserLocation = YES;
+    
+    
+    self.app = [[UIApplication sharedApplication] delegate];
     // pop back to previous controller
     arrRestaurantData = [[NSMutableArray alloc]initWithArray:self.app.arrRegisteredDictinaryRestaurantData];
 
@@ -49,62 +63,102 @@
     [self.tabBarItem setImage:[[UIImage imageNamed:@"NearMe_InActive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setTitle:@"NEAR ME"];
     [self.tabBarItem setTitleTextAttributes:@{
-                                              NSFontAttributeName: [UIFont fontWithName:@"GRAYSTROKE" size:10],
+                                              NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
                                               NSForegroundColorAttributeName: [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]
                                               } forState:UIControlStateNormal];
     [self.tabBarItem setTitleTextAttributes:@{
-                                              NSFontAttributeName: [UIFont fontWithName:@"GRAYSTROKE" size:10],
+                                              NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
                                               NSForegroundColorAttributeName: [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]
                                               } forState:UIControlStateSelected];
 }
-- (void) getCurrentLocation {
-    self.locationManager.delegate = self;
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    
-    [self.locationManager startUpdatingLocation];
-}
+
 
 #pragma mark - CLLocationManagerDelegate
-- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+- (CLLocationManager*)locationManager
 {
-    NSLog(@"didFailWithError: %@", error);
-    UIAlertController * loginErrorAlert = [UIAlertController
-                                           alertControllerWithTitle:@"Error obtraining location:"
-                                           message:error.localizedDescription
-                                           preferredStyle:UIAlertControllerStyleAlert];
-    [self presentViewController:loginErrorAlert animated:YES completion:nil];
-    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-        //NSLog(@"reset password cancelled.");
-        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
-    }];
-    [loginErrorAlert addAction:ok];
+    if (_locationManager == nil) {
+        _locationManager = [[CLLocationManager alloc] init];
+        _locationManager.delegate = self;
+        _locationManager.distanceFilter = (METERS_PER_MILE * 5.0);
+        _locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters;
+        _locationManager.activityType = CLActivityTypeOtherNavigation;
+    }
+    
+    return _locationManager;
 }
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
 {
-    NSLog(@"didUpdateToLocation: %@", newLocation);
-    CLLocation *currentLocation = newLocation;
-    
-    if (currentLocation != nil) {
-        self.app.myLatitude = currentLocation.coordinate.longitude;
-        self.app.mylongitued = currentLocation.coordinate.longitude;
-    }
+    // once we know where we are, we don't need to keep the location services running,
+    // so stop it
     [self.locationManager stopUpdatingLocation];
+    CLLocation *location = [locations lastObject];
+    
+    [self.mapView setCenterCoordinate:location.coordinate animated:YES];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
+{
+    if(error)
+        NSLog(@"[%@ %@] error(%ld): %@", NSStringFromClass([self class]), NSStringFromSelector(_cmd), (long)[error code],
+              [error localizedDescription]);
+}
+
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
+{
+    switch (status)
+    {
+        case kCLAuthorizationStatusNotDetermined:
+        case kCLAuthorizationStatusAuthorizedAlways:
+        case kCLAuthorizationStatusAuthorizedWhenInUse:
+            
+            [self.locationManager startUpdatingLocation];
+            break;
+            
+        case kCLAuthorizationStatusRestricted:
+        case kCLAuthorizationStatusDenied:
+        default:
+            
+            [self.locationManager stopUpdatingLocation];
+            break;
+    }
+}
+
+#pragma mark - MKMapViewDelegate
+- (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
+{
+    //checkMyLocation = NO;
+    MKCoordinateRegion region = [self createViewableRegionForLocation:userLocation.coordinate andDistance:5.0f];
+    [self.mapView setRegion:region animated:YES];
+    
+}
+- (MKCoordinateRegion)createViewableRegionForLocation:(CLLocationCoordinate2D)coordinate andDistance:(CLLocationDistance)distance
+{
+    CLLocationDirection latInMeters = distance*METERS_PER_MILE;
+    CLLocationDirection longInMeters = distance*METERS_PER_MILE;
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coordinate, latInMeters, longInMeters);
+    
+    return region;
 }
 
 -(MKAnnotationView *) mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation {
-    MKPinAnnotationView *MyPin=[[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"current"];
-    //MyPin.pinColor = MKPinAnnotationColorPurple;
+    MKPinAnnotationView *MyPin;
     
-    UIButton *advertButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-    //[advertButton addTarget:self action:@selector(button:) forControlEvents:UIControlEventTouchUpInside];
-    MyPin.rightCalloutAccessoryView = advertButton;
-    MyPin.draggable = YES;
-    MyPin.animatesDrop=TRUE;
-    MyPin.canShowCallout = YES;
-    MyPin.highlighted = NO;
-    //MyPin.image = [UIImage imageNamed:@"Pin.png"];
-    
+    if (![[[annotation title] uppercaseString] isEqualToString: [@"My Location" uppercaseString]]) {
+        
+        MyPin = [[MKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:@"current"];
+        UIButton *advertButton = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        //[advertButton addTarget:self action:@selector(button:) forControlEvents:UIControlEventTouchUpInside];
+        MyPin.rightCalloutAccessoryView = advertButton;
+        MyPin.draggable = YES;
+        MyPin.animatesDrop=TRUE;
+        MyPin.canShowCallout = YES;
+        MyPin.highlighted = NO;
+        MyPin.image = [UIImage imageNamed:@"Pin.png"];
+    }else{
+        
+    }
+
     return MyPin;
 }
 
@@ -133,13 +187,16 @@
 
 
 - (void)viewWillAppear:(BOOL)animated{
-    [self getCurrentLocation];
+    
+    [self.locationManager startUpdatingLocation];
+    checkMyLocation = YES;
     MKCoordinateRegion Bridge = { {self.app.myLatitude, self.app.mylongitued} , {0.0, 0.0} };
-    [mapView setDelegate:self];
+    //[mapView setDelegate:self];
     arrRestaurantData = [[NSMutableArray alloc]initWithArray:self.app.arrRegisteredDictinaryRestaurantData];
     [mapView removeAnnotations:mapView.annotations];
     
     for (int count = 0; arrRestaurantData.count>count ; count++) {
+       
         float lati = [[(NSDictionary*)[arrRestaurantData objectAtIndex:count] objectForKey:@"latitude"] floatValue];
         float longgi = [[(NSDictionary*)[arrRestaurantData objectAtIndex:count] objectForKey:@"longitude"] floatValue];
         Bridge.center.latitude = lati;
@@ -167,9 +224,7 @@
     MKCircle *circle = [MKCircle circleWithCenterCoordinate:circleMiddlePoint radius:300];
     [mapView addOverlay: circle];
     
-    //update my location
-    [self getCurrentLocation];
-    
+   
 }
 - (IBAction)goSlide:(UIButton *)sender {
     [self.navigationController.revealViewController rightRevealToggle:nil];

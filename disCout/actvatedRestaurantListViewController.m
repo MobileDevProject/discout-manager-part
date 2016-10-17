@@ -116,11 +116,11 @@
     [self.tabBarItem setImage:[[UIImage imageNamed:@"Activity_InActive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setTitle:@"ACTIVITY"];
     [self.tabBarItem setTitleTextAttributes:@{
-                                              NSFontAttributeName: [UIFont fontWithName:@"GRAYSTROKE" size:10],
+                                              NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
                                               NSForegroundColorAttributeName: [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]
                                               } forState:UIControlStateNormal];
     [self.tabBarItem setTitleTextAttributes:@{
-                                              NSFontAttributeName: [UIFont fontWithName:@"GRAYSTROKE" size:10],
+                                              NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
                                               NSForegroundColorAttributeName: [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]
                                               } forState:UIControlStateSelected];
     
