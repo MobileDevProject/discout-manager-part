@@ -59,12 +59,12 @@
     // then if StateSelected should be different, you should add this code
     [UITabBarItem.appearance setTitleTextAttributes:
      @{
-       NSFontAttributeName: [UIFont fontWithName:@"GRAYSTROKE" size:10],
+       NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
        NSForegroundColorAttributeName: [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]
        } forState:UIControlStateSelected];
     [UITabBarItem.appearance setTitleTextAttributes:
      @{
-       NSFontAttributeName: [UIFont fontWithName:@"GRAYSTROKE" size:10],
+       NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
        NSForegroundColorAttributeName: [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]
        } forState:UIControlStateNormal];
     return YES;

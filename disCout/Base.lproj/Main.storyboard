@@ -189,7 +189,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="698-K2-68h" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="685.5" y="-293.5"/>
+            <point key="canvasLocation" x="474" y="-305"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="uOw-cG-LC3">
@@ -207,9 +207,9 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qSv-58-6ry" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-158" y="-294"/>
+            <point key="canvasLocation" x="-279" y="-305"/>
         </scene>
-        <!--Sign Up-->
+        <!--Item-->
         <scene sceneID="lcC-dB-q3s">
             <objects>
                 <viewController storyboardIdentifier="SignUp" useStoryboardIdentifierAsRestorationIdentifier="YES" id="u4e-Tf-wAK" customClass="SignUp" sceneMemberID="viewController">
@@ -419,6 +419,8 @@
                             <constraint firstItem="aPN-O0-Jsb" firstAttribute="centerX" secondItem="BLN-fV-NtY" secondAttribute="centerX" id="yaS-jW-Muk"/>
                         </constraints>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" image="Activity_Inactive.png" id="9cb-as-W86"/>
+                    <navigationItem key="navigationItem" id="GhU-0T-0gn"/>
                     <connections>
                         <outlet property="btnPhoto" destination="Sa4-p8-dfM" id="2je-uF-mW1"/>
                         <outlet property="btnRegisterCard" destination="gF0-n8-dQR" id="sF2-nb-2NP"/>
@@ -429,7 +431,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="baJ-r7-m55" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1179.5" y="-293.5"/>
+            <point key="canvasLocation" x="1132" y="-296"/>
         </scene>
         <!--register card-->
         <scene sceneID="UhX-j3-eNd">
@@ -2043,7 +2045,7 @@
             </objects>
             <point key="canvasLocation" x="2108" y="573"/>
         </scene>
-        <!--Create Profile Viewcontroller-->
+        <!--Item-->
         <scene sceneID="EKQ-ab-tk7">
             <objects>
                 <viewController storyboardIdentifier="createProfileViewcontroller" useStoryboardIdentifierAsRestorationIdentifier="YES" id="lKz-S8-pk4" customClass="createProfileViewcontroller" sceneMemberID="viewController">
@@ -2090,6 +2092,8 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="xXg-Ti-0h2"/>
+                    <navigationItem key="navigationItem" id="How-Dt-Ing"/>
                     <connections>
                         <outlet property="txtFieldEmail" destination="N3L-wY-dJt" id="fLy-eP-xIE"/>
                         <outlet property="txtFieldFirstName" destination="U2V-g2-amu" id="R3q-S4-WGp"/>
@@ -2099,7 +2103,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I9S-DR-1ew" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="295" y="3056"/>
+            <point key="canvasLocation" x="422" y="2926"/>
         </scene>
         <!--Restaurant Profile View Controller-->
         <scene sceneID="ui0-8n-JXX">
@@ -3278,14 +3282,14 @@ Cancellations can be applied after a full billing cycle.</string>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="cQY-Gl-29m" kind="relationship" relationship="rootViewController" id="dqx-Kb-kvc"/>
+                        <segue destination="cQY-Gl-29m" kind="relationship" relationship="rootViewController" id="qeV-lS-kuq"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="TRU-A1-dvB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1178" y="1398"/>
         </scene>
-        <!--ACTIVITY-->
+        <!--Actvated Restaurant List View Controller-->
         <scene sceneID="FgX-Co-cko">
             <objects>
                 <viewController storyboardIdentifier="actvatedRestaurantListViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cQY-Gl-29m" customClass="actvatedRestaurantListViewController" sceneMemberID="viewController">
@@ -3509,7 +3513,6 @@ Cancellations can be applied after a full billing cycle.</string>
                             <constraint firstItem="MAB-RO-ATw" firstAttribute="top" secondItem="GBm-XG-E4d" secondAttribute="bottom" id="gcO-Mt-Ft2"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="ACTIVITY" image="MyCard_InActive.png" id="dNy-36-jrp"/>
                     <navigationItem key="navigationItem" id="b5v-ko-RcW"/>
                     <connections>
                         <outlet property="tableResList" destination="MAB-RO-ATw" id="UtH-pi-PRe"/>
@@ -3517,10 +3520,11 @@ Cancellations can be applied after a full billing cycle.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fvY-Jo-6UJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1178" y="2233"/>
+            <point key="canvasLocation" x="1177" y="2212"/>
         </scene>
     </scenes>
     <resources>
+        <image name="Activity_Inactive.png" width="32" height="32"/>
         <image name="Activity_Tea.png" width="20" height="21"/>
         <image name="Activity_drink.png" width="18" height="21"/>
         <image name="CardNumberTextField.png" width="615" height="90"/>

@@ -116,9 +116,9 @@
 		F3F003ED1D56726E006613FC /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F3F003EC1D56726E006613FC /* SearchViewController.m */; };
 		F3F6261A1D451B7900A0A52E /* restaurantListViewcontroller.m in Sources */ = {isa = PBXBuildFile; fileRef = F3F626191D451B7900A0A52E /* restaurantListViewcontroller.m */; };
 		F3F7412B1DAD20CC0050E10C /* Annotation.m in Sources */ = {isa = PBXBuildFile; fileRef = F3F7412A1DAD20CC0050E10C /* Annotation.m */; };
-		F3FE534C1DB1491C00FDF856 /* SPEC_OFFERS_ICON.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FE534B1DB1491C00FDF856 /* SPEC_OFFERS_ICON.png */; };
+		F3FDA8271DB5125400A409B5 /* logout.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F3FDA8251DB5125400A409B5 /* logout.jpg */; };
+		F3FDA8281DB5125400A409B5 /* SPEC_OFFERS_ICON.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F3FDA8261DB5125400A409B5 /* SPEC_OFFERS_ICON.jpg */; };
 		F3FE534E1DB14B5C00FDF856 /* profile.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FE534D1DB14B5C00FDF856 /* profile.png */; };
-		F3FE53521DB14D6B00FDF856 /* logout.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FE53511DB14D6B00FDF856 /* logout.png */; };
 		F3FE53541DB14E6E00FDF856 /* card.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FE53531DB14E6E00FDF856 /* card.png */; };
 		F3FED3881D973FF900EE32B2 /* MON_Active.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FED3861D973FF900EE32B2 /* MON_Active.png */; };
 		F3FED3891D973FF900EE32B2 /* MON_InActive.png in Resources */ = {isa = PBXBuildFile; fileRef = F3FED3871D973FF900EE32B2 /* MON_InActive.png */; };
@@ -310,9 +310,9 @@
 		F3F626191D451B7900A0A52E /* restaurantListViewcontroller.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = restaurantListViewcontroller.m; sourceTree = "<group>"; };
 		F3F741291DAD20CC0050E10C /* Annotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Annotation.h; sourceTree = "<group>"; };
 		F3F7412A1DAD20CC0050E10C /* Annotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Annotation.m; sourceTree = "<group>"; };
-		F3FE534B1DB1491C00FDF856 /* SPEC_OFFERS_ICON.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = SPEC_OFFERS_ICON.png; sourceTree = "<group>"; };
+		F3FDA8251DB5125400A409B5 /* logout.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = logout.jpg; sourceTree = "<group>"; };
+		F3FDA8261DB5125400A409B5 /* SPEC_OFFERS_ICON.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = SPEC_OFFERS_ICON.jpg; sourceTree = "<group>"; };
 		F3FE534D1DB14B5C00FDF856 /* profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profile.png; sourceTree = "<group>"; };
-		F3FE53511DB14D6B00FDF856 /* logout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logout.png; sourceTree = "<group>"; };
 		F3FE53531DB14E6E00FDF856 /* card.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = card.png; sourceTree = "<group>"; };
 		F3FED3861D973FF900EE32B2 /* MON_Active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MON_Active.png; sourceTree = "<group>"; };
 		F3FED3871D973FF900EE32B2 /* MON_InActive.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MON_InActive.png; sourceTree = "<group>"; };
@@ -465,10 +465,10 @@
 		F34154F51D76D238002CB9E4 /* png */ = {
 			isa = PBXGroup;
 			children = (
+				F3FDA8251DB5125400A409B5 /* logout.jpg */,
+				F3FDA8261DB5125400A409B5 /* SPEC_OFFERS_ICON.jpg */,
 				F3FE53531DB14E6E00FDF856 /* card.png */,
-				F3FE53511DB14D6B00FDF856 /* logout.png */,
 				F3FE534D1DB14B5C00FDF856 /* profile.png */,
-				F3FE534B1DB1491C00FDF856 /* SPEC_OFFERS_ICON.png */,
 				F319D0501D98BD960078A472 /* person0.jpg */,
 				F319D03B1D980BB40078A472 /* checkOrange.png */,
 				F319D0391D97F6690078A472 /* payBack.png */,
@@ -881,12 +881,11 @@
 				F3B7B42E1D7E19650089A236 /* unCheckCuisine.png in Resources */,
 				F32C31871D3FFDD700D0D78D /* LaunchScreen.storyboard in Resources */,
 				F3A8570B1D77938E00461D84 /* m3.mp3 in Resources */,
+				F3FDA8281DB5125400A409B5 /* SPEC_OFFERS_ICON.jpg in Resources */,
 				F3A8570A1D77938E00461D84 /* m2.mp3 in Resources */,
 				F319D0381D97F4510078A472 /* payInfo.png in Resources */,
 				F3B4C0751D7A2B2C000E696C /* btn_Search_Filter.png in Resources */,
 				F34155161D76D238002CB9E4 /* timer.png in Resources */,
-				F3FE53521DB14D6B00FDF856 /* logout.png in Resources */,
-				F3FE534C1DB1491C00FDF856 /* SPEC_OFFERS_ICON.png in Resources */,
 				F34155141D76D238002CB9E4 /* Search_InActive.png in Resources */,
 				F34155091D76D238002CB9E4 /* call.png in Resources */,
 				F34155121D76D238002CB9E4 /* Pin.png in Resources */,
@@ -935,6 +934,7 @@
 				F319D03C1D980BB40078A472 /* checkOrange.png in Resources */,
 				F3764D0C1D85F985006790FC /* FeeMonthly.png in Resources */,
 				F3B4C07E1D7A2B2C000E696C /* SignIn_SignUp.png in Resources */,
+				F3FDA8271DB5125400A409B5 /* logout.jpg in Resources */,
 				F3B4C0771D7A2B2C000E696C /* Filter_UnCheck.png in Resources */,
 				F3FE53541DB14E6E00FDF856 /* card.png in Resources */,
 				F341550A1D76D238002CB9E4 /* CardNumberTextField.png in Resources */,
