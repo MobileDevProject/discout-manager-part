@@ -36,14 +36,14 @@ static NSString *kCellIdentifier = @"cellIdentifier";
 - (BOOL)shouldAutorotate {
     return YES;
 }
-
+/*
 - (NSUInteger)supportedInterfaceOrientations {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
         return UIInterfaceOrientationMaskAll;
     else
         return UIInterfaceOrientationMaskAllButUpsideDown;
 }
-
+*/
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     MapViewController *mapViewController = segue.destinationViewController;
     
@@ -145,13 +145,13 @@ static NSString *kCellIdentifier = @"cellIdentifier";
     
     MKLocalSearchCompletionHandler completionHandler = ^(MKLocalSearchResponse *response, NSError *error) {
         if (error != nil) {
-            NSString *errorStr = [[error userInfo] valueForKey:NSLocalizedDescriptionKey];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not find places"
-                                                            message:errorStr
-                                                           delegate:nil
-                                                  cancelButtonTitle:@"OK"
-                                                  otherButtonTitles:nil];
-            [alert show];
+            //NSString *errorStr = [[error userInfo] valueForKey:NSLocalizedDescriptionKey];
+            //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Could not find places"
+                                                            //message:errorStr
+                                                          // delegate:nil
+                                                  //cancelButtonTitle:@"OK"
+                                                  //otherButtonTitles:nil];
+            //[alert show];
         } else {
             self.places = [response mapItems];
             

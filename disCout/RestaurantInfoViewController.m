@@ -10,6 +10,9 @@
 #import "SWRevealViewController.h"
 #import "RestaurantInfoViewController.h"
 #import "actvatedRestaurantListViewController.h"
+#import "LocationMapOfRestaurants.h"
+#import "MapViewController.h"
+#import "restaurantListViewcontroller.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "webViewController.h"
 @interface RestaurantInfoViewController ()
@@ -109,7 +112,22 @@
             UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 FIRDatabaseReference* savedResData = [[[Request dataref]child:@"restaurants"] child:ResName];
                 [savedResData removeValue];
+                
+                
+                
+                NSArray *myControllers = self.navigationController.viewControllers;
+                int previous = (int)myControllers.count - 2;
+                UIViewController *previousController = [myControllers objectAtIndex:previous];
+                if ([previousController isKindOfClass:[actvatedRestaurantListViewController class]] || [previousController isKindOfClass:[MapViewController class]]) {
                 [app.arrRegisteredDictinaryRestaurantData removeObjectAtIndex:app.selectedResNumberFromResList];
+                }else if([previousController isKindOfClass:[restaurantListViewcontroller class]] || [previousController isKindOfClass:[LocationMapOfRestaurants class]]){
+                    //remove the registered restaurant to be matched name.
+                    for (int count1 = 0; app.arrRegisteredDictinaryRestaurantData.count>count1; count1++) {
+                        if ([[app.arrRegisteredDictinaryRestaurantData objectAtIndex:count1] objectForKey:@"name"]==ResName) {
+                            [app.arrRegisteredDictinaryRestaurantData removeObjectAtIndex:count1];
+                        }
+                    }
+                }
                 [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
                 [self.navigationController popViewControllerAnimated:YES];
             }];

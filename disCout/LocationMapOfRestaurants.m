@@ -59,6 +59,7 @@
     //int d = 9;
 }
 - (IBAction)goSideMenu:(UIButton *)sender {
+    [self.view addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
     [self.navigationController.revealViewController rightRevealToggle:nil];
 }
 - (void)mapView:(MKMapView *)mapView didDeselectAnnotationView:(MKAnnotationView *)view{

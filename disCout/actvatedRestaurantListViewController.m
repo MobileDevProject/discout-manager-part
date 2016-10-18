@@ -113,7 +113,7 @@
     */
     
     [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"Activity_Active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    [self.tabBarItem setImage:[[UIImage imageNamed:@"Activity_InActive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
+    [self.tabBarItem setImage:[[UIImage imageNamed:@"Activity_Inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setTitle:@"ACTIVITY"];
     [self.tabBarItem setTitleTextAttributes:@{
                                               NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
@@ -202,7 +202,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath{
-    app = [UIApplication sharedApplication].delegate;
+    
     app.selectedResNumberFromResList = (int)indexPath.row;
     app.dicRestaurantData = [[NSDictionary alloc]initWithDictionary:[app.arrRegisteredDictinaryRestaurantData objectAtIndex:app.selectedResNumberFromResList] copyItems:YES];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

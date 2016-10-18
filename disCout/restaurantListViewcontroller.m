@@ -18,7 +18,7 @@
 @interface restaurantListViewcontroller ()
 {
     int count;
-    AppDelegate *app;
+    AppDelegate * app;
     NSArray *ArrResThumbnailsName;
     NSArray *ArrResNames;
     NSMutableArray* registeredRestaurants;
@@ -42,9 +42,10 @@
     app = [UIApplication sharedApplication].delegate;
     checkScroll = false;
     [self.tableResList setCanCancelContentTouches:NO];
-    muarResName = [[NSMutableArray alloc]init];
+    
 }
 - (void)viewWillAppear:(BOOL)animated{
+    muarResName = [[NSMutableArray alloc]init];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         //[Request retrieveAllRestaurantsID];
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -141,7 +142,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath{
-    app = [UIApplication sharedApplication].delegate;
+    //app = [UIApplication sharedApplication].delegate;
     app.selectedResNumberFromResList = (int)indexPath.row;
     app.dicRestaurantData = [[NSDictionary alloc]initWithDictionary:[app.arrSearchedDictinaryRestaurantData objectAtIndex:app.selectedResNumberFromResList] copyItems:YES];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

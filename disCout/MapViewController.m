@@ -227,6 +227,7 @@
    
 }
 - (IBAction)goSlide:(UIButton *)sender {
+    [self.view addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
     [self.navigationController.revealViewController rightRevealToggle:nil];
 }
 @end

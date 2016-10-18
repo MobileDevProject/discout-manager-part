@@ -51,6 +51,9 @@
     
     // Add this code to change StateNormal text Color,
     [[UIView appearanceWhenContainedInInstancesOfClasses:[[NSArray alloc] initWithObjects:[UITabBar class],nil]] setTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+    
+    
+    
     [UITabBarItem.appearance setTitleTextAttributes:
      @{NSForegroundColorAttributeName : [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]}
                                            forState:UIControlStateNormal];
