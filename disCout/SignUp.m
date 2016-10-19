@@ -41,7 +41,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (IBAction)changePhoto:(UIButton *)sender {
-    [self playSound:@"m3"];
+   
     //UIActionSheet *objViewActionSheet = [[UIActionSheet alloc] initWithTitle:@"Choose Image" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Use Gallery",@"Use Camera", nil];
     
     UIAlertController* alert = [UIAlertController
@@ -84,6 +84,8 @@
     [alert addAction:button1];
     [alert addAction:button2];
     [self presentViewController:alert animated:YES completion:nil];
+    
+
 }
 
 -(void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info{
@@ -183,6 +185,7 @@
                              app.user.name = self.textUserName.text;
                              app.user.email = self.textEmail.text;
                              app.user.isCancelled = @"false";
+                             [Request cancelMembership];
                              //current photo save
                              if (self.btnPhoto.currentBackgroundImage) {
                                 
@@ -256,18 +259,12 @@
 //definition of my functions
 #pragma mark - saveUserData
 - (void) viewWillAppear:(BOOL)animated{
-//    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-//    NSString *documentsDirectory = [paths objectAtIndex:0];
-//    NSString *savedImagePath = [documentsDirectory stringByAppendingPathComponent:@"savedImage.png"];
-//    UIImage *theImage = [UIImage imageWithContentsOfFile:savedImagePath];
-//    UIImage *image1 = self.btnPhoto.currentBackgroundImage;
-//    if (!image1 && !theImage) {
-//        [self.btnPhoto setBackgroundImage:[UIImage imageNamed:@"person0.jpg"] forState:UIControlStateNormal];
-//    }else if(theImage){
-//        [self.btnPhoto setBackgroundImage:theImage forState:UIControlStateNormal];
-//        
-//    }
-    [self.btnPhoto setBackgroundImage:[UIImage imageNamed:@"person0.jpg"] forState:UIControlStateNormal];
+    
+    UIImage *image1 = self.btnPhoto.currentBackgroundImage;
+    if (!image1) {
+        [self.btnPhoto setBackgroundImage:[UIImage imageNamed:@"person0.jpg"] forState:UIControlStateNormal];
+    }
+    //[self.btnPhoto setBackgroundImage:[UIImage imageNamed:@"person0.jpg"] forState:UIControlStateNormal];
 }
 
 

@@ -9,6 +9,7 @@
 #import "Request.h"
 FIRDatabaseReference *ref;
 @implementation Request
+
 //Firebase
 + (FIRDatabaseReference*)dataref{
     return [[FIRDatabase database] reference];
@@ -33,10 +34,29 @@ FIRDatabaseReference *ref;
 //+ (void)getUserName{
 //    [[[[[self dataref] child:@"users"] child:[self currentUserUid] ] child:@"name"] ];
 //}
-+ (void)saveCardInfo:number cvid:cvid date:date{
-    [[[[[[self dataref] child:@"users"] child:[self currentUserUid] ]child:@"general info" ] child:@"card cvid"] setValue:cvid];
-    [[[[[[self dataref] child:@"users"] child:[self currentUserUid] ]child:@"general info" ] child:@"card number"] setValue:number];
-    [[[[[[self dataref] child:@"users"] child:[self currentUserUid] ]child:@"general info" ] child:@"card date"] setValue:date];
++ (NSError*)saveCardInfo:number cvid:cvid date:date membership:membership{
+    AppDelegate *app = [UIApplication sharedApplication].delegate;
+    [[[[[[self dataref] child:@"users"] child:[self currentUserUid] ]child:@"general info" ] child:@"card cvid"] setValue:cvid withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        app.Acterror = error;
+    }];
+    [[[[[[self dataref] child:@"users"] child:[self currentUserUid] ]child:@"general info" ] child:@"card number"] setValue:number withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        app.Acterror = error;
+    }];
+    [[[[[[self dataref] child:@"users"] child:[self currentUserUid] ]child:@"general info" ] child:@"card date"] setValue:date withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        app.Acterror = error;
+    }];
+    [[[[[[self dataref] child:@"users"] child:[self currentUserUid] ]child:@"general info" ] child:@"membership"] setValue:membership withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        app.Acterror = error;
+    }];
+    [[[[[[self dataref] child:@"users"] child:[self currentUserUid] ]child:@"general info" ] child:@"iscancelled"] setValue:@"true" withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        
+    }];
+    return app.Acterror;
+}
++ (void)cancelMembership{
+    [[[[[[self dataref] child:@"users"] child:[self currentUserUid] ]child:@"general info" ] child:@"iscancelled"] setValue:@"false" withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+        
+    }];
 }
 + (void)saveRestaurantData:dicRestaurantData{
     

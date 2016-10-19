@@ -217,7 +217,11 @@
     LocationMapOfRestaurants *restaurantInfoViewController = [storyboard instantiateViewControllerWithIdentifier:@"LocationMapOfRestaurants"];
     [self.navigationController pushViewController:restaurantInfoViewController animated:YES];
 }
-
+- (IBAction)Sort:(UIButton *)sender {
+    NSSortDescriptor * descriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+    app.arrRegisteredDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrRegisteredDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+    [self.tableResList reloadData];
+}
 - (IBAction)goSlide:(UIButton *)sender {
     [self.navigationController.revealViewController rightRevealToggle:nil];
 }

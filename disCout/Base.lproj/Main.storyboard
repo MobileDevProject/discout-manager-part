@@ -197,7 +197,7 @@
                 <navigationController storyboardIdentifier="SignViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" navigationBarHidden="YES" id="9Gj-5e-k3L" sceneMemberID="viewController">
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="T6i-sD-Wjx">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="T6i-sD-Wjx">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -359,7 +359,7 @@
                                     <constraint firstAttribute="height" constant="60" id="ZIj-d0-SD8"/>
                                 </constraints>
                                 <connections>
-                                    <action selector="changePhoto:" destination="u4e-Tf-wAK" eventType="touchUpInside" id="7HL-B6-My8"/>
+                                    <action selector="changePhoto:" destination="u4e-Tf-wAK" eventType="touchUpInside" id="MhG-WU-j0t"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gF0-n8-dQR">
@@ -422,7 +422,7 @@
                     <tabBarItem key="tabBarItem" title="Item" image="Activity_Inactive.png" id="9cb-as-W86"/>
                     <navigationItem key="navigationItem" id="GhU-0T-0gn"/>
                     <connections>
-                        <outlet property="btnPhoto" destination="Sa4-p8-dfM" id="2je-uF-mW1"/>
+                        <outlet property="btnPhoto" destination="Sa4-p8-dfM" id="V2h-HS-lfc"/>
                         <outlet property="btnRegisterCard" destination="gF0-n8-dQR" id="sF2-nb-2NP"/>
                         <outlet property="textEmail" destination="3dw-5n-uRp" id="V9c-xO-lDb"/>
                         <outlet property="textPass" destination="9rk-uB-ppl" id="dzf-NS-Pe3"/>
@@ -452,9 +452,12 @@
                                             <constraint firstAttribute="width" constant="145" id="Gsr-2s-gNG"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="AvenirNextLTPro-Medium" family="Avenir Next LT Pro" pointSize="16"/>
-                                        <state key="normal" title="$5 / Month" backgroundImage="btn_Search_Active.png">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <state key="normal" title="$5 / Month" backgroundImage="btn_Search_InActive.png">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="set5Membership:" destination="5aS-pX-81Y" eventType="touchUpInside" id="aFV-bo-aJu"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YQR-WN-dBF">
                                         <constraints>
@@ -464,6 +467,9 @@
                                         <state key="normal" title="$10 / Month" backgroundImage="btn_Search_InActive.png">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="set10Membership:" destination="5aS-pX-81Y" eventType="touchUpInside" id="RM4-2G-xH0"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -621,9 +627,23 @@
                                     <constraint firstAttribute="height" constant="70" id="vb6-pC-4Vp"/>
                                 </constraints>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hlh-cM-Q4c">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="65" id="lyd-3L-jTp"/>
+                                    <constraint firstAttribute="width" constant="270" id="mRV-2P-FYj"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="GRAYSTROKE" family="GRAYSTROKE" pointSize="14"/>
+                                <state key="normal" title="Cancel Membership" backgroundImage="btn_Search_Clear.png">
+                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="cancelMembership:" destination="5aS-pX-81Y" eventType="touchUpInside" id="GEv-K6-3ld"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="o1D-Rd-0Vr" firstAttribute="top" secondItem="Hlh-cM-Q4c" secondAttribute="bottom" constant="14" id="17O-Xj-g87"/>
                             <constraint firstItem="xcv-NO-9F1" firstAttribute="top" secondItem="Yql-hy-WLE" secondAttribute="bottom" constant="15" id="8jd-GB-uGq"/>
                             <constraint firstItem="g4f-st-Zm8" firstAttribute="centerX" secondItem="Hmy-1h-191" secondAttribute="centerX" id="Cdg-FE-aw2"/>
                             <constraint firstItem="hBg-Ns-9Xy" firstAttribute="width" secondItem="Hmy-1h-191" secondAttribute="width" id="GaY-QL-FMj"/>
@@ -632,12 +652,13 @@
                             <constraint firstItem="g4f-st-Zm8" firstAttribute="width" secondItem="Hmy-1h-191" secondAttribute="width" multiplier="0.85" id="KPB-jU-fF8"/>
                             <constraint firstItem="hBg-Ns-9Xy" firstAttribute="centerX" secondItem="Hmy-1h-191" secondAttribute="centerX" id="Ki1-1O-DfV"/>
                             <constraint firstItem="rQI-7F-vJb" firstAttribute="trailing" secondItem="xcv-NO-9F1" secondAttribute="trailing" id="Mx9-d1-nh8"/>
-                            <constraint firstItem="o1D-Rd-0Vr" firstAttribute="top" secondItem="I8R-5B-nJC" secondAttribute="bottom" constant="78" id="NKf-S6-Jg5"/>
                             <constraint firstItem="5Uk-bi-w5E" firstAttribute="leading" secondItem="a8h-Mo-RZR" secondAttribute="leading" id="NN3-7F-wLJ"/>
+                            <constraint firstItem="Hlh-cM-Q4c" firstAttribute="centerX" secondItem="Hmy-1h-191" secondAttribute="centerX" id="SZT-of-abP"/>
                             <constraint firstItem="Yql-hy-WLE" firstAttribute="top" secondItem="hBg-Ns-9Xy" secondAttribute="bottom" constant="28" id="Tio-Tp-zsH"/>
                             <constraint firstItem="xcv-NO-9F1" firstAttribute="trailing" secondItem="Yql-hy-WLE" secondAttribute="trailing" id="hU3-3f-UCV"/>
                             <constraint firstItem="Yql-hy-WLE" firstAttribute="centerX" secondItem="Hmy-1h-191" secondAttribute="centerX" id="hdp-mN-F73"/>
                             <constraint firstItem="rQI-7F-vJb" firstAttribute="leading" secondItem="xcv-NO-9F1" secondAttribute="leading" id="jPQ-WJ-lmk"/>
+                            <constraint firstItem="Hlh-cM-Q4c" firstAttribute="top" secondItem="I8R-5B-nJC" secondAttribute="bottom" constant="32" id="kkS-XU-cNf"/>
                             <constraint firstItem="xcv-NO-9F1" firstAttribute="leading" secondItem="Yql-hy-WLE" secondAttribute="leading" id="laE-Zj-jlB"/>
                             <constraint firstItem="I8R-5B-nJC" firstAttribute="centerX" secondItem="Hmy-1h-191" secondAttribute="centerX" id="pTa-xP-JoR"/>
                             <constraint firstItem="hBg-Ns-9Xy" firstAttribute="top" secondItem="UgM-mR-keP" secondAttribute="bottom" id="vRx-ME-2qd"/>
@@ -646,6 +667,8 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="button10Membership" destination="YQR-WN-dBF" id="Chx-jc-Qbm"/>
+                        <outlet property="button5Membership" destination="a8h-Mo-RZR" id="fLk-dA-pzh"/>
                         <outlet property="textCV" destination="H4S-Pf-ex1" id="7Zs-iW-ABB"/>
                         <outlet property="textCardNumber" destination="dcO-dF-tmU" id="rza-cf-Ckj"/>
                         <outlet property="textDate" destination="Oxj-xC-Vsc" id="mW6-Jy-YUO"/>
@@ -711,10 +734,22 @@
                                             <action selector="GoBack:" destination="W9h-Ga-GTR" eventType="touchUpInside" id="oza-b8-b6b"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hPI-Nj-ljT">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="173-lg-kh1"/>
+                                            <constraint firstAttribute="width" constant="25" id="Eje-7w-fr9"/>
+                                        </constraints>
+                                        <state key="normal" backgroundImage="sort-icon.png"/>
+                                        <connections>
+                                            <action selector="Sort:" destination="W9h-Ga-GTR" eventType="touchUpInside" id="Ari-wl-7MO"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.21176470589999999" green="0.21176470589999999" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="BZn-W4-b7w" firstAttribute="centerY" secondItem="2Zc-u2-JJZ" secondAttribute="centerY" id="53F-Sz-Xil"/>
+                                    <constraint firstItem="hPI-Nj-ljT" firstAttribute="centerY" secondItem="2Zc-u2-JJZ" secondAttribute="centerY" id="7eT-g7-jap"/>
+                                    <constraint firstItem="Kvc-to-8aV" firstAttribute="leading" secondItem="hPI-Nj-ljT" secondAttribute="trailing" constant="8" id="HFW-4N-Xto"/>
                                     <constraint firstItem="qLg-a5-5tX" firstAttribute="centerY" secondItem="Kvc-to-8aV" secondAttribute="centerY" id="VU0-l8-A6b"/>
                                     <constraint firstItem="BZn-W4-b7w" firstAttribute="leading" secondItem="2Zc-u2-JJZ" secondAttribute="leading" constant="8" id="WFM-TV-7CF"/>
                                     <constraint firstItem="FXR-xl-7iX" firstAttribute="centerX" secondItem="2Zc-u2-JJZ" secondAttribute="centerX" id="Z3x-OD-uxS"/>
@@ -1505,7 +1540,7 @@
                     <tabBarItem key="tabBarItem" title="Item" id="Xub-l8-9If"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="0cT-R5-jIp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="0cT-R5-jIp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1681,15 +1716,6 @@
                                     <constraint firstItem="2IY-AV-Wwn" firstAttribute="centerX" secondItem="Nie-Jq-Sv9" secondAttribute="centerX" id="WTm-5Z-5hg"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jTv-5u-Bq7">
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="94" id="CwM-Xj-6Pt"/>
-                                    <constraint firstAttribute="height" constant="40" id="vgh-UU-I4e"/>
-                                </constraints>
-                                <state key="normal" title="Clear" backgroundImage="btn_Search_Clear.png">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Kdj-ms-t7r">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="8MX-q0-JbO"/>
@@ -1788,39 +1814,52 @@
                                             <constraint firstAttribute="height" constant="1" id="gqF-SW-cW8"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Qa-Bp-H9b" userLabel="rate">
-                                        <fontDescription key="fontDescription" name="AvenirNextLTPro-Medium" family="Avenir Next LT Pro" pointSize="17"/>
-                                        <state key="normal" title="Rate">
-                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="setOptionLocation:" destination="krQ-cT-KAS" eventType="touchUpInside" id="pf5-UA-JMl"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xny-Sd-EJ8" userLabel="alphabetical">
-                                        <fontDescription key="fontDescription" name="AvenirNextLTPro-Medium" family="Avenir Next LT Pro" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="AvenirNextLTPro-Medium" family="Avenir Next LT Pro" pointSize="15"/>
                                         <state key="normal" title="Alphabetical">
                                             <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="setOptionZipCode:" destination="krQ-cT-KAS" eventType="touchUpInside" id="1Rq-WD-Ipf"/>
+                                            <action selector="setOptionAlphabetical:" destination="krQ-cT-KAS" eventType="touchUpInside" id="FED-8g-SLs"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mlI-g9-i4B">
+                                        <fontDescription key="fontDescription" name="AvenirNextLTPro-Medium" family="Avenir Next LT Pro" pointSize="15"/>
+                                        <state key="normal" title="Match">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setOptionMatch:" destination="krQ-cT-KAS" eventType="touchUpInside" id="I6q-pS-f1x"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="fill" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Qa-Bp-H9b" userLabel="rate">
+                                        <fontDescription key="fontDescription" name="AvenirNextLTPro-Medium" family="Avenir Next LT Pro" pointSize="15"/>
+                                        <state key="normal" title="Rate">
+                                            <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="setOptionRate:" destination="krQ-cT-KAS" eventType="touchUpInside" id="SiD-pU-jcC"/>
                                         </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
+                                    <constraint firstItem="mlI-g9-i4B" firstAttribute="centerY" secondItem="nr2-c5-pYT" secondAttribute="centerY" id="0se-e8-5Ac"/>
                                     <constraint firstAttribute="width" constant="300" id="22A-IS-n4z"/>
-                                    <constraint firstAttribute="trailing" secondItem="0Qa-Bp-H9b" secondAttribute="trailing" id="8ru-Me-zeF"/>
                                     <constraint firstItem="0Qa-Bp-H9b" firstAttribute="height" secondItem="nr2-c5-pYT" secondAttribute="height" constant="-3" id="Eo9-xp-PPV"/>
                                     <constraint firstItem="Xny-Sd-EJ8" firstAttribute="leading" secondItem="nr2-c5-pYT" secondAttribute="leading" id="HYt-eu-Jwy"/>
                                     <constraint firstItem="Xny-Sd-EJ8" firstAttribute="height" secondItem="nr2-c5-pYT" secondAttribute="height" constant="-3" id="Hb3-Ig-vDg"/>
+                                    <constraint firstItem="0Qa-Bp-H9b" firstAttribute="centerX" secondItem="nr2-c5-pYT" secondAttribute="centerX" id="JZF-Jw-8VY"/>
                                     <constraint firstAttribute="bottom" secondItem="kkX-k5-57S" secondAttribute="bottom" constant="1" id="PXJ-qq-C5v"/>
+                                    <constraint firstAttribute="trailing" secondItem="mlI-g9-i4B" secondAttribute="trailing" constant="8" id="QM3-uW-eTY"/>
                                     <constraint firstItem="kkX-k5-57S" firstAttribute="centerX" secondItem="nr2-c5-pYT" secondAttribute="centerX" id="Qyb-c9-3Ez"/>
                                     <constraint firstItem="kkX-k5-57S" firstAttribute="width" secondItem="nr2-c5-pYT" secondAttribute="width" id="SVK-xS-aao"/>
-                                    <constraint firstItem="0Qa-Bp-H9b" firstAttribute="top" secondItem="nr2-c5-pYT" secondAttribute="top" id="hGq-Ia-7Bh"/>
-                                    <constraint firstItem="Xny-Sd-EJ8" firstAttribute="width" secondItem="nr2-c5-pYT" secondAttribute="width" multiplier="0.4" id="hrY-Aa-Dcf"/>
+                                    <constraint firstItem="0Qa-Bp-H9b" firstAttribute="top" secondItem="nr2-c5-pYT" secondAttribute="top" constant="2" id="hGq-Ia-7Bh"/>
+                                    <constraint firstItem="mlI-g9-i4B" firstAttribute="height" secondItem="nr2-c5-pYT" secondAttribute="height" id="hMk-fh-a9A"/>
+                                    <constraint firstItem="Xny-Sd-EJ8" firstAttribute="width" secondItem="nr2-c5-pYT" secondAttribute="width" multiplier="0.3" id="hrY-Aa-Dcf"/>
                                     <constraint firstAttribute="height" constant="50" id="ojs-fM-ouh"/>
                                     <constraint firstItem="Xny-Sd-EJ8" firstAttribute="top" secondItem="nr2-c5-pYT" secondAttribute="top" constant="2" id="rDH-tV-I0q"/>
-                                    <constraint firstItem="0Qa-Bp-H9b" firstAttribute="width" secondItem="nr2-c5-pYT" secondAttribute="width" multiplier="0.4" id="wNe-Zt-odh"/>
+                                    <constraint firstItem="0Qa-Bp-H9b" firstAttribute="width" secondItem="nr2-c5-pYT" secondAttribute="width" multiplier="0.3" id="wNe-Zt-odh"/>
+                                    <constraint firstItem="mlI-g9-i4B" firstAttribute="width" secondItem="nr2-c5-pYT" secondAttribute="width" multiplier="0.3" id="zPI-ew-hkV"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nuJ-xs-m9I" userLabel="FiterOptionsView">
@@ -1931,10 +1970,9 @@
                             <constraint firstItem="cQw-aU-oEK" firstAttribute="width" secondItem="2rc-CM-ddg" secondAttribute="width" id="BsK-ud-eHt"/>
                             <constraint firstItem="Nie-Jq-Sv9" firstAttribute="centerX" secondItem="2rc-CM-ddg" secondAttribute="centerX" id="Efc-WW-1gy"/>
                             <constraint firstItem="Nie-Jq-Sv9" firstAttribute="centerY" secondItem="2rc-CM-ddg" secondAttribute="centerY" id="IDx-eZ-8oD"/>
-                            <constraint firstItem="9M1-CV-VrI" firstAttribute="top" secondItem="jTv-5u-Bq7" secondAttribute="bottom" constant="20" id="J3I-xp-ohc"/>
                             <constraint firstItem="9M1-CV-VrI" firstAttribute="top" secondItem="Kdj-ms-t7r" secondAttribute="bottom" constant="20" id="NRq-a4-B3q"/>
-                            <constraint firstItem="Kdj-ms-t7r" firstAttribute="trailing" secondItem="nuJ-xs-m9I" secondAttribute="trailing" id="Pwm-Pn-arT"/>
                             <constraint firstItem="nuJ-xs-m9I" firstAttribute="centerX" secondItem="2rc-CM-ddg" secondAttribute="centerX" id="Q6U-f4-wye"/>
+                            <constraint firstItem="Kdj-ms-t7r" firstAttribute="centerX" secondItem="2rc-CM-ddg" secondAttribute="centerX" id="RKk-Su-FNE"/>
                             <constraint firstItem="yVv-ay-LSi" firstAttribute="centerX" secondItem="2rc-CM-ddg" secondAttribute="centerX" id="RqY-Vb-0rC"/>
                             <constraint firstItem="ht7-Vj-nIJ" firstAttribute="top" secondItem="yVv-ay-LSi" secondAttribute="bottom" constant="4" id="UTc-4g-EJh"/>
                             <constraint firstItem="nr2-c5-pYT" firstAttribute="centerX" secondItem="2rc-CM-ddg" secondAttribute="centerX" id="Vem-NT-BmZ"/>
@@ -1942,7 +1980,6 @@
                             <constraint firstItem="nr2-c5-pYT" firstAttribute="top" secondItem="ht7-Vj-nIJ" secondAttribute="bottom" constant="8" id="Yzg-pX-K8F"/>
                             <constraint firstItem="yVv-ay-LSi" firstAttribute="top" secondItem="cQw-aU-oEK" secondAttribute="bottom" constant="5" id="ZJj-c7-z1z"/>
                             <constraint firstItem="nuJ-xs-m9I" firstAttribute="top" secondItem="nr2-c5-pYT" secondAttribute="bottom" constant="13" id="cj7-qL-9vq"/>
-                            <constraint firstItem="jTv-5u-Bq7" firstAttribute="leading" secondItem="nuJ-xs-m9I" secondAttribute="leading" id="deq-uK-sQX"/>
                             <constraint firstItem="Kdj-ms-t7r" firstAttribute="top" secondItem="2IY-AV-Wwn" secondAttribute="bottom" constant="10" id="iB2-Ci-srq"/>
                             <constraint firstItem="Nie-Jq-Sv9" firstAttribute="width" secondItem="2rc-CM-ddg" secondAttribute="width" id="pRe-VT-wCw"/>
                         </constraints>
@@ -1951,9 +1988,10 @@
                     <navigationItem key="navigationItem" id="ELd-E6-PVf"/>
                     <connections>
                         <outlet property="btnCheckAll" destination="W0f-ac-yBs" id="RAJ-jb-pLr"/>
+                        <outlet property="btnCheckAlphabetical" destination="Xny-Sd-EJ8" id="pMV-az-hpx"/>
                         <outlet property="btnCheckByName" destination="PCb-Zg-Ob7" id="ZBq-DO-ZEN"/>
-                        <outlet property="btnCheckLocation" destination="0Qa-Bp-H9b" id="aqR-8M-vDe"/>
-                        <outlet property="btnCheckZipCode" destination="Xny-Sd-EJ8" id="9K1-I9-1j9"/>
+                        <outlet property="btnCheckMatch" destination="mlI-g9-i4B" id="ilS-2Z-9X6"/>
+                        <outlet property="btnCheckrate" destination="0Qa-Bp-H9b" id="AWc-zt-lop"/>
                         <outlet property="btnSearchLocation" destination="6A8-NJ-GMi" id="Roq-V7-Agt"/>
                         <outlet property="imgCheckSelectAll" destination="k8Y-rn-1eh" id="nE1-f5-mpk"/>
                         <outlet property="searchDisplayController" destination="w4Z-lU-lOD" id="tbr-fL-20Q"/>
@@ -1981,7 +2019,7 @@
                     <tabBarItem key="tabBarItem" title="Item" id="nk5-9D-Mnr"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="j7U-pw-2OM">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="j7U-pw-2OM">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2000,7 +2038,7 @@
                     <tabBarItem key="tabBarItem" title="Item" id="0PG-Hg-Acf"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rFi-ce-CvK">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="rFi-ce-CvK">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2208,7 +2246,7 @@
             <objects>
                 <navigationController storyboardIdentifier="tabbarNavigationController" useStoryboardIdentifierAsRestorationIdentifier="YES" navigationBarHidden="YES" id="Eew-gp-w33" sceneMemberID="viewController">
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="BrV-E9-H8k">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="BrV-E9-H8k">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -2676,6 +2714,11 @@
                                             <color key="titleColor" red="0.92549019610000005" green="0.30588235289999999" blue="0.1058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AQp-D1-JnO">
+                                        <frame key="frameInset" minX="267" minY="25" width="22" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <state key="normal" backgroundImage="sort-icon.png"/>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.21176470589999999" green="0.21176470589999999" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -2703,7 +2746,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Spa-RJ-9yE" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-159" y="2197"/>
+            <point key="canvasLocation" x="-159.19999999999999" y="2196.2518740629689"/>
         </scene>
         <!--see offers-->
         <scene sceneID="cwc-tL-vJA">
@@ -3053,7 +3096,7 @@ Cancellations can be applied after a full billing cycle.</string>
                     <tabBarItem key="tabBarItem" title="Item" id="gPX-9h-4is"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2s8-7P-Nxz">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="2s8-7P-Nxz">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -3108,13 +3151,25 @@ Cancellations can be applied after a full billing cycle.</string>
                                             <action selector="exchangeMap:" destination="cQY-Gl-29m" eventType="touchUpInside" id="IGy-UU-qOb"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="38b-Qo-ube">
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="30" id="5Ig-bP-Qtf"/>
+                                            <constraint firstAttribute="width" constant="25" id="uAb-iP-GyD"/>
+                                        </constraints>
+                                        <state key="normal" backgroundImage="sort-icon.png"/>
+                                        <connections>
+                                            <action selector="Sort:" destination="cQY-Gl-29m" eventType="touchUpInside" id="LG7-RY-eBl"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.21176470589999999" green="0.21176470589999999" blue="0.21176470589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="p5c-ZD-nqQ" firstAttribute="centerY" secondItem="GBm-XG-E4d" secondAttribute="centerY" id="0qF-AL-UUL"/>
                                     <constraint firstItem="mlO-ar-p4O" firstAttribute="centerX" secondItem="GBm-XG-E4d" secondAttribute="centerX" id="1g6-1Q-2Mh"/>
                                     <constraint firstItem="IuI-2I-Dg7" firstAttribute="centerY" secondItem="p5c-ZD-nqQ" secondAttribute="centerY" id="BvQ-LH-K3v"/>
+                                    <constraint firstItem="p5c-ZD-nqQ" firstAttribute="leading" secondItem="38b-Qo-ube" secondAttribute="trailing" constant="8" id="N2i-1l-LHS"/>
                                     <constraint firstAttribute="height" constant="70" id="bka-fS-qNM"/>
+                                    <constraint firstItem="38b-Qo-ube" firstAttribute="centerY" secondItem="GBm-XG-E4d" secondAttribute="centerY" id="fcc-3q-6dN"/>
                                     <constraint firstAttribute="trailing" secondItem="IuI-2I-Dg7" secondAttribute="trailing" constant="8" id="hTe-f7-G43"/>
                                     <constraint firstItem="mlO-ar-p4O" firstAttribute="centerY" secondItem="GBm-XG-E4d" secondAttribute="centerY" id="v5A-7z-wCk"/>
                                     <constraint firstItem="IuI-2I-Dg7" firstAttribute="leading" secondItem="p5c-ZD-nqQ" secondAttribute="trailing" constant="15" id="xdG-96-wB5"/>
@@ -3297,7 +3352,7 @@ Cancellations can be applied after a full billing cycle.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fvY-Jo-6UJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1204" y="2222"/>
+            <point key="canvasLocation" x="1204" y="2221.4392803598203"/>
         </scene>
     </scenes>
     <resources>
@@ -3330,5 +3385,6 @@ Cancellations can be applied after a full billing cycle.</string>
         <image name="registerMark.png" width="66" height="83"/>
         <image name="registeredIndicator.png" width="88" height="90"/>
         <image name="roundRectangleCell.png" width="663" height="249"/>
+        <image name="sort-icon.png" width="103" height="71"/>
     </resources>
 </document>

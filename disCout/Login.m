@@ -50,7 +50,7 @@
         if ([email isEqualToString:@"mera.lahid@yandex.com"]) {
             app.isManager = YES;
             
-            [self loadResDataAndGo];
+            [self loadUserDataAndGo];
         }
         //[self loadUserDataAndGo];
         ///////////////***********************************************************************************
@@ -276,11 +276,11 @@
     app.user.userId = [NSString stringWithFormat:@"%@", [Request currentUserUid]];
     NSString *userID = app.user.userId;
     app.arrPayDictinaryData = [[NSMutableArray alloc]init];
-
+    
     childCount = 1;
     [self.view setUserInteractionEnabled:NO];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-
+    
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         
         FIRDatabaseReference *refGeneralInfo = [[[[Request dataref] child:@"users"]child: userID]child:@"general info"];
@@ -321,7 +321,7 @@
                 [app addTabBar];
             });
         }];
-
+        
     });
 
     

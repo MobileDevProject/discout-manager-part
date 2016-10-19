@@ -26,6 +26,7 @@
 //they are moved into Backend
 //@property (nonatomic,retain)NSArray *arrSearchedRestaurants;
 @property(nonatomic, retain)NSArray* arrCuisine;
+@property(nonatomic)BOOL isSelectedAllCuisine;
 
 //temp array and variables
 @property(nonatomic, retain)NSMutableArray* arrSelectedCuisine;
@@ -35,7 +36,7 @@
 @property(nonatomic, retain) NSString *UserID;
 @property(nonatomic, retain) NSString *UserPhotoURL;
 @property(nonatomic, retain) UserInfo *user;
-
+@property(nonatomic, retain) NSError* Acterror;
 //pay info
 //@property(nonatomic, retain) NSMutableArray *paydates;
 //@property(nonatomic, retain) NSMutableArray *payamounts;

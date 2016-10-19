@@ -35,7 +35,7 @@
     //init condition
     
     //1. init Cuisign type
-    self.arrCuisine = [[NSArray alloc]initWithObjects:@"African", @"American",@"British", @"Caribbean", @"Chinese", @"French", @"Greek", @"Indian", @"Italian", @"Japanese", @"Medditerranean", @"Mexican", @"Moroccan", @"Spanish", @"Thai", @"Turkish", @"Vietnamese", nil];
+    self.arrCuisine = [[NSArray alloc]initWithObjects:@"Restaurants", @"Mexican",@"Fast Food", @"Sandwiches", @"Food", @"Burgers", @"Pizza", @"American (Traditional)", @"Chinese", @"Chicken Wings", @"Nightlife", @"Seafood", @"Bars", @"Breakfast & Brunch", @"Italian", @"American (New)", @"Tex-Mex", @"Delis", @"Barbeque", @"Vietnamese", @"Cajun/Creole", @"Food Trucks", @"Salad", @"Cafes", @"Latin American", nil];
     self.user = [[UserInfo alloc]init];
     //init selected cuisine type
     self.arrSelectedCuisine = [[NSMutableArray alloc]init];
@@ -51,8 +51,6 @@
     
     // Add this code to change StateNormal text Color,
     [[UIView appearanceWhenContainedInInstancesOfClasses:[[NSArray alloc] initWithObjects:[UITabBar class],nil]] setTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
-    
-    
     
     [UITabBarItem.appearance setTitleTextAttributes:
      @{NSForegroundColorAttributeName : [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]}

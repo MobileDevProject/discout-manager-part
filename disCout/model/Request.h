@@ -15,9 +15,12 @@
 + (NSString*)currentUserUid;
 + (void)saveUserEmail:email;
 + (void)saveUserName:name;
-+ (void)saveCardInfo:number cvid:cvid date:date;
++ (NSError*)saveCardInfo:number cvid:cvid date:date membership:membership;
++ (void)cancelMembership;
+//+ (NSError)
 + (void)saveRestaurantData:dicRestaurantData;
 + (void)saveUserPhoto:UserPhotoURL;
 //+ (void)retrieveAllRestaurantsID;
-+ (void)retrieveAllRestaurantsData;;
++ (void)retrieveAllRestaurantsData;
+
 @end

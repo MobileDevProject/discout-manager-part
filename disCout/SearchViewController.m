@@ -18,7 +18,6 @@
 @implementation SearchViewController
 {
     AppDelegate *app;
-    bool checkSelectAll;
     NSMutableArray *arrSelectedCuisine;
     NSArray *arrCuisine;
     __weak IBOutlet UIButton *btnSearchLocation;
@@ -26,9 +25,10 @@
     __weak IBOutlet UIButton *btnCheckByName;
     __weak IBOutlet UIButton *btnCheckAll;
     
-    __weak IBOutlet UIButton *btnCheckZipCode;
+    __weak IBOutlet UIButton *btnCheckAlphabetical;
 
-    __weak IBOutlet UIButton *btnCheckLocation;
+    __weak IBOutlet UIButton *btnCheckrate;
+    IBOutlet UIButton *btnCheckMatch;
     
     __weak IBOutlet UIView *viewSelectCuisine;
     __weak IBOutlet UICollectionView *tableCuisine;
@@ -48,7 +48,7 @@
     arrSelectedCuisine = [[NSMutableArray alloc]init];
     arrSelectedCuisine = app.arrSelectedCuisine;
     [viewSelectCuisine setHidden:YES];
-    checkSelectAll = true;
+    app.isSelectedAllCuisine = true;
     
     //if checkedSearchKeyType ==1 -> check the location button, 2 : by Name, 3:All
     app.intSearchOption1 = 1;
@@ -64,7 +64,7 @@
     [btnCheckByName setBackgroundImage:[UIImage imageNamed:@"btn_Search_Active.png"] forState:UIControlStateSelected];
     [btnCheckByName setSelected:NO];
     
-    //selected the checkByName button
+    //selected the checkAll button
     [btnCheckAll setBackgroundImage:[UIImage imageNamed:@"btn_Search_All_InActive.png"] forState:UIControlStateNormal];
     [btnCheckAll setTintColor:[UIColor colorWithWhite:1 alpha:0]];
     [btnCheckAll setBackgroundImage:[UIImage imageNamed:@"btn_Search_All_Active.png"] forState:UIControlStateSelected];
@@ -73,18 +73,24 @@
     
     //if checkedSearchKeyType ==1 -> check the location button, 2 : by Name, 3:All
     app.intSearchOption2 = 1;
-    //selected the checkSearchLocation button
-    [btnCheckZipCode setBackgroundImage:[UIImage imageNamed:@"btn_Search_InActive.png"] forState:UIControlStateNormal];
-    [btnCheckZipCode setTintColor:[UIColor colorWithWhite:1 alpha:0]];
-    [btnCheckZipCode setBackgroundImage:[UIImage imageNamed:@"btn_Search_Active.png"] forState:UIControlStateSelected];
-    [btnCheckZipCode setSelected:YES];
+    //selected the btnCheckAlphabetical button
+    [btnCheckAlphabetical setBackgroundImage:[UIImage imageNamed:@"btn_Search_InActive.png"] forState:UIControlStateNormal];
+    [btnCheckAlphabetical setTintColor:[UIColor colorWithWhite:1 alpha:0]];
+    [btnCheckAlphabetical setBackgroundImage:[UIImage imageNamed:@"btn_Search_Active.png"] forState:UIControlStateSelected];
+    [btnCheckAlphabetical setSelected:YES];
     
     
-    //selected the checkByName button
-    [btnCheckLocation setBackgroundImage:[UIImage imageNamed:@"btn_Search_InActive.png"] forState:UIControlStateNormal];
-    [btnCheckLocation setTintColor:[UIColor colorWithWhite:1 alpha:0]];
-    [btnCheckLocation setBackgroundImage:[UIImage imageNamed:@"btn_Search_Active.png"] forState:UIControlStateSelected];
-    [btnCheckLocation setSelected:NO];
+    //selected the btnCheckrate button
+    [btnCheckrate setBackgroundImage:[UIImage imageNamed:@"btn_Search_InActive.png"] forState:UIControlStateNormal];
+    [btnCheckrate setTintColor:[UIColor colorWithWhite:1 alpha:0]];
+    [btnCheckrate setBackgroundImage:[UIImage imageNamed:@"btn_Search_Active.png"] forState:UIControlStateSelected];
+    [btnCheckrate setSelected:NO];
+    
+    //selected the btnCheckrate button
+    [btnCheckMatch setBackgroundImage:[UIImage imageNamed:@"btn_Search_InActive.png"] forState:UIControlStateNormal];
+    [btnCheckMatch setTintColor:[UIColor colorWithWhite:1 alpha:0]];
+    [btnCheckMatch setBackgroundImage:[UIImage imageNamed:@"btn_Search_Active.png"] forState:UIControlStateSelected];
+    [btnCheckMatch setSelected:NO];
     
     [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"Search_Active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setImage:[[UIImage imageNamed:@"Search_InActive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
@@ -95,7 +101,17 @@
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
 }
-
+-(void)viewWillDisappear:(BOOL)animated{
+    app.isSelectedAllCuisine = true;
+    for (int index = 0; index<arrCuisine.count; index++) {
+        
+        
+        if ([(NSString*)[arrSelectedCuisine objectAtIndex:index] isEqualToString:@"0"]) {
+            app.isSelectedAllCuisine = false;
+            
+        }
+    }
+}
 - (IBAction)setOptionSearchLocation:(UIButton *)sender {
     [btnCheckAll setSelected:NO];
     [btnCheckByName setSelected:NO];
@@ -116,17 +132,25 @@
     app.intSearchOption1 = 2;
 }
 
-- (IBAction)setOptionZipCode:(UIButton *)sender {
-    [btnCheckLocation setSelected:NO];
+- (IBAction)setOptionAlphabetical:(UIButton *)sender {
+    [btnCheckrate setSelected:NO];
+    [btnCheckMatch setSelected:NO];
     [sender setSelected:YES];
     app.intSearchOption2 = 1;
 }
 
-- (IBAction)setOptionLocation:(UIButton *)sender {
-    [btnCheckZipCode setSelected:NO];
+- (IBAction)setOptionRate:(UIButton *)sender {
+    [btnCheckAlphabetical setSelected:NO];
+    [btnCheckMatch setSelected:NO];
+    [sender setSelected:YES];
+    app.intSearchOption2 = 2;
+    
+}
+- (IBAction)setOptionMatch:(UIButton *)sender {
+    [btnCheckAlphabetical setSelected:NO];
+    [btnCheckrate setSelected:NO];
     [sender setSelected:YES];
     app.intSearchOption2 = 3;
-    
 }
 
 
@@ -249,7 +273,20 @@
                 NSString *resMobileURL = [itemRestaurant objectForKey:@"mobile_url"] ? [itemRestaurant objectForKey:@"mobile_url"] : @" ";
                 
                 NSDictionary *dicRestaurantData = [NSDictionary dictionaryWithObjectsAndKeys:resName, @"name", resCategories, @"categories", resDisplayPhoneNumber, @"display_phone", resAddress, @"address", resRating, @"rating", resReviewCount, @"review_count", postalcode, @"postal_code", lati,@"latitude",longgi, @"longitude", resRatingImageURL, @"rating_img_url", ResSnippetText, @"snippet_text", resImageURL, @"image_url", resMobileURL, @"mobile_url", nil];
-                [app.arrSearchedDictinaryRestaurantData addObject:dicRestaurantData];
+                //filter with cuisine type
+                if ([imgCheckSelectAll.image isEqual:[UIImage imageNamed:@"btn_Search_Active.png"]]) {
+                    [app.arrSearchedDictinaryRestaurantData addObject:dicRestaurantData];
+                }else{
+                for (int count1 = 0;app.arrCuisine.count>count1;count1++) {
+                    if ([[app.arrSelectedCuisine objectAtIndex:count1] isEqualToString:@"1"] && [resCategories containsString:[app.arrCuisine objectAtIndex:count1]]) {
+                        [app.arrSearchedDictinaryRestaurantData addObject:dicRestaurantData];
+                        break;
+                    }
+
+                }
+                }
+
+                
                 
                 
                     
@@ -257,6 +294,17 @@
                         
                         
                 if (count == businessArray.count) {
+                    NSSortDescriptor * descriptor;
+                    if (app.intSearchOption2==1) {
+                        descriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+                        app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+                    }else if(app.intSearchOption2==2)
+                    {
+                        descriptor = [[NSSortDescriptor alloc] initWithKey:@"rating" ascending:NO];
+                        app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+                    }
+                    
+                    //app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
                     
                     [MBProgressHUD hideHUDForView:self.view animated:YES];/////
                     [self.view setUserInteractionEnabled:YES];
@@ -270,11 +318,11 @@
                
             }            
         }else {
-            
+            dispatch_async(dispatch_get_main_queue(), ^{
                 NSLog(@"No business was found");
                 [MBProgressHUD hideHUDForView:self.view animated:YES];/////
                 [self.view setUserInteractionEnabled:YES];
-            
+            });
         }
     }];
  });
@@ -317,6 +365,7 @@
     
     //init
     //select all cuisine Image
+    
     [imgCheckSelectAll setImage:[UIImage imageNamed:@"btn_Search_Active.png"]];
     arrSelectedCuisine = [[NSMutableArray alloc]init];
     for (int index = 0; index<arrCuisine.count; index++) {
@@ -331,6 +380,7 @@
 - (IBAction)clearAllCuisine:(UIButton *)sender {
     //init
     //Clear all cuisine Image
+    app.isSelectedAllCuisine = false;
     [imgCheckSelectAll setImage:[UIImage imageNamed:@"unCheckCuisine.png"]];
     arrSelectedCuisine = [[NSMutableArray alloc]init];
     for (int index = 0; index<arrCuisine.count; index++) {
@@ -369,6 +419,7 @@
         
         if ([(NSString*)[arrSelectedCuisine objectAtIndex:index] isEqualToString:@"0"]) {
             [imgCheckSelectAll setImage:[UIImage imageNamed:@"unCheckCuisine.png"]];
+            
         }
     }
 

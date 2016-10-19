@@ -23,7 +23,7 @@
     NSArray *ArrResNames;
     NSMutableArray* registeredRestaurants;
     NSMutableArray *muarResName;
-    
+    NSSortDescriptor * descriptor;
     
     //NSArray *businessArray;
     bool checkScroll;
@@ -42,7 +42,7 @@
     app = [UIApplication sharedApplication].delegate;
     checkScroll = false;
     [self.tableResList setCanCancelContentTouches:NO];
-    
+   
 }
 - (void)viewWillAppear:(BOOL)animated{
     muarResName = [[NSMutableArray alloc]init];
@@ -70,11 +70,33 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+- (IBAction)goSideMenu:(UIButton *)sender {
+    [self.navigationController.revealViewController rightRevealToggle:nil];
+}
+
 - (IBAction)ExchangeMap:(UIButton *)sender {
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     LocationMapOfRestaurants *restaurantInfoViewController = [storyboard instantiateViewControllerWithIdentifier:@"LocationMapOfRestaurants"];
     [self.navigationController pushViewController:restaurantInfoViewController animated:YES];
 }
+- (IBAction)Sort:(UIButton *)sender {
+    
+    
+    if (app.intSearchOption2==1) {
+        descriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+        app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+    }else if(app.intSearchOption2==2)
+    {
+        descriptor = [[NSSortDescriptor alloc] initWithKey:@"rating" ascending:NO];
+        app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+    }
+    
+    //app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+        [self.tableResList reloadData];
+
+    
+}
+
 - (IBAction)GoBack:(UIButton *)sender {
     [self.navigationController popViewControllerAnimated:YES];
 }
@@ -174,7 +196,7 @@
     }
 
 
-    if (indexOfTable + 3 > muarResName.count && app.IsMatch) {
+    if (indexOfTable + 3 > [self.tableResList numberOfItemsInSection:0] && app.IsMatch) {
         checkScroll = true;
         [self.view setUserInteractionEnabled:NO];
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -222,8 +244,8 @@
                 if (resAddress==nil) {
                     resAddress = @" ";
                 }
-                //NSString* postalcode = (NSString*)[dic1 objectForKey:@"postal_code"];
                 
+                //NSString* postalcode = (NSString*)[dic1 objectForKey:@"postal_code"];
                 NSDictionary *dic2 = [dic1 objectForKey:@"coordinate"];
                 NSString* lati = [dic2 objectForKey:@"latitude"] ? [dic2 objectForKey:@"latitude"] : @" ";
                 NSString* longgi = [dic2 objectForKey:@"longitude"] ? [dic2 objectForKey:@"longitude"] : @" ";
@@ -252,7 +274,19 @@
                 NSString *resMobileURL = [itemRestaurant objectForKey:@"mobile_url"] ? [itemRestaurant objectForKey:@"mobile_url"] : @" ";
                 [muarResName addObject:resName];
                 NSDictionary *dicRestaurantData = [NSDictionary dictionaryWithObjectsAndKeys:resName, @"name", resCategories, @"categories", resDisplayPhoneNumber, @"display_phone", resAddress, @"address", resRating, @"rating", resReviewCount, @"review_count", postalcode, @"postal_code", lati,@"latitude",longgi, @"longitude", resRatingImageURL, @"rating_img_url", ResSnippetText, @"snippet_text", resImageURL, @"image_url", resMobileURL, @"mobile_url", nil];
-                [app.arrSearchedDictinaryRestaurantData addObject:dicRestaurantData];
+                
+                if (app.isSelectedAllCuisine) {
+                    [app.arrSearchedDictinaryRestaurantData addObject:dicRestaurantData];
+                }else{
+                    for (int count1 = 0;app.arrCuisine.count>count1;count1++) {
+                        if ([[app.arrSelectedCuisine objectAtIndex:count1] isEqualToString:@"1"] && [resCategories containsString:[app.arrCuisine objectAtIndex:count1]]) {
+                            [app.arrSearchedDictinaryRestaurantData addObject:dicRestaurantData];
+                            break;
+                        }
+                        
+                    }
+                }
+
                 
                 //snnipet and rating image download
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -288,11 +322,7 @@
     }
 
     }
-
 }
 
-- (IBAction)goSideMenu:(UIButton *)sender {
-    [self.navigationController.revealViewController rightRevealToggle:nil];
-}
 
 @end
