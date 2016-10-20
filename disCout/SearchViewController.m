@@ -208,8 +208,10 @@
         //muarRestaurantImage = [[NSMutableArray alloc]init];
         if (error) {
             NSLog(@"An error happened during the request: %@", error);
+            dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD hideHUDForView:self.view animated:YES];/////
             [self.view setUserInteractionEnabled:YES];
+            });
         } else if (searchResponseJSON) {
             //[[[FIRDatabase database] reference] setValue:searchResponseJSON forKey:@"num"];
                 NSData *jsonData = [NSJSONSerialization dataWithJSONObject:searchResponseJSON options:NSJSONWritingPrettyPrinted error:nil];

@@ -214,10 +214,12 @@
     startoffset = [NSString stringWithFormat:@"%d", ((app.offsetNumber-1) * 20) +1];
     [APISample queryTopBusinessInfoForTerm:app.term location:app.location offset:startoffset completionHandler:^(NSDictionary *searchResponseJSON, NSError *error) {
         if (error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"An error happened during the request: %@", error);
             [MBProgressHUD hideHUDForView:self.view animated:YES];/////
             [self.view setUserInteractionEnabled:YES];
             checkScroll = false;
+            });
         } else if (searchResponseJSON) {
             NSMutableArray* businessArray = searchResponseJSON[@"businesses"];
             //app.arrSearchedRestaurants = app.businessArray;

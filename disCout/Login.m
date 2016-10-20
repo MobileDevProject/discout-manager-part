@@ -50,15 +50,15 @@
         if ([email isEqualToString:@"mera.lahid@yandex.com"]) {
             app.isManager = YES;
             
-            [self loadUserDataAndGo];
-        }
+           [self loadResDataAndGo];
+        }else{
         //[self loadUserDataAndGo];
         ///////////////***********************************************************************************
         
         
         
-    }else{
-
+    }
+        //[self loadUserDataAndGo];
     }
 
 }
@@ -71,7 +71,6 @@
     NSString *strUserEmail = _txtFieldEmail.text;
     NSString *strUserPass = _txtFieldPassword.text;
     
-    [self playSound:@"m3"];
     // [START headless_email_auth]
     
     if ([strUserEmail isEqual:@""] && [strUserPass isEqual:@""]) {
@@ -129,11 +128,12 @@
                                                                                 preferredStyle:UIAlertControllerStyleAlert];
                                          [self presentViewController:loginErrorAlert animated:YES completion:nil];
                                          UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                                             [MBProgressHUD hideHUDForView:self.view animated:YES];
+                                             [self.view setUserInteractionEnabled:YES];
                                              [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
                                          }];
                                          [loginErrorAlert addAction:ok];
-                                         [MBProgressHUD hideHUDForView:self.view animated:YES];
-                                         [self.view setUserInteractionEnabled:YES];
+                                         
                                      }
                                      else
                                      {
@@ -143,7 +143,7 @@
                                              
                                              if (error==nil) {
                                                  
-                                                 //[self loadUserDataAndGo];
+                                                 //[self loadUserDataAndGo];//if manager.
                                              }
                                              
                                              dispatch_async(dispatch_get_main_queue(), ^{///////
@@ -159,7 +159,7 @@
                                                          app.isManager = YES;
                                                          [self loadResDataAndGo];
                                                      }
-                                                     //[self loadUserDataAndGo];
+                                                     [self loadUserDataAndGo];
                                                  }
                                              });
                                              //after progress
@@ -280,7 +280,7 @@
     childCount = 1;
     [self.view setUserInteractionEnabled:NO];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
+    [self loadResData];
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         
         FIRDatabaseReference *refGeneralInfo = [[[[Request dataref] child:@"users"]child: userID]child:@"general info"];
@@ -301,7 +301,7 @@
         }];
         
         FIRDatabaseReference* refPay = [[[FIRDatabase database] reference] child:@"users"];
-        [self loadResData];
+        //[self loadResData];
         [refPay observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
             NSDictionary*dic = snapshot.value;
             NSArray *keys;

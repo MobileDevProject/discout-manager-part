@@ -13,7 +13,7 @@
 #import "Request.h"
 #import "CreditCard-Validator.h"
 #import "SignUp.h"
-@interface RegisterCardViewController ()
+@interface RegisterCardViewController ()<UITextFieldDelegate>
 @property (strong, nonatomic) IBOutlet UITextField *textCardNumber;
 @property (strong, nonatomic) IBOutlet UITextField *textDate;
 @property (strong, nonatomic) IBOutlet UITextField *textCV;
@@ -38,6 +38,9 @@
     [self.button10Membership setBackgroundImage:[UIImage imageNamed:@"btn_Search_Active.png"] forState:UIControlStateSelected];
     [self.button10Membership setSelected:NO];
 
+    self.textCardNumber.delegate = self;
+    self.textDate.delegate = self;
+    self.textCV.delegate= self;
     // Do any additional setup after loading the view.a
 }
 
@@ -146,8 +149,7 @@
         [Request saveCardInfo:@"" cvid:@"" date:@"" membership:@""];
         [Request cancelMembership];
         }];
-    
-    [loginErrorAlert addAction:ok];
+
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
     }];
@@ -158,5 +160,10 @@
 - (IBAction)goSlide:(UIButton *)sender {
     [self.revealViewController rightRevealToggle:nil];
 }
-
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    // do whatever you have to do    
+    [textField resignFirstResponder];
+    return YES;
+}
 @end

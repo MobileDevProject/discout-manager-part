@@ -137,13 +137,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "disCout/Login.m"
-            timestampString = "498583898.18718"
+            filePath = "disCout/SignUp.m"
+            timestampString = "498603278.367429"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "-viewDidLoad"
+            startingLineNumber = "104"
+            endingLineNumber = "104"
+            landmarkName = "-RegisterCard:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

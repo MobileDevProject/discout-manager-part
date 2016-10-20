@@ -802,25 +802,25 @@
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" tag="103" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="juh-8V-Isf">
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="73" id="8ID-0l-sFK"/>
-                                                                <constraint firstAttribute="height" constant="73" id="tSQ-md-D2v"/>
+                                                                <constraint firstAttribute="width" constant="80" id="8ID-0l-sFK"/>
+                                                                <constraint firstAttribute="height" constant="80" id="tSQ-md-D2v"/>
                                                             </constraints>
                                                         </imageView>
                                                         <imageView userInteractionEnabled="NO" tag="110" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="registeredIndicator.png" translatesAutoresizingMaskIntoConstraints="NO" id="kJb-9B-oVK">
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="60" id="JWP-9V-qFD"/>
-                                                                <constraint firstAttribute="width" constant="60" id="tef-f3-JRh"/>
+                                                                <constraint firstAttribute="height" constant="50" id="JWP-9V-qFD"/>
+                                                                <constraint firstAttribute="width" constant="50" id="tef-f3-JRh"/>
                                                             </constraints>
                                                         </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstItem="kJb-9B-oVK" firstAttribute="top" secondItem="9BQ-B2-RwU" secondAttribute="top" id="MXQ-Fv-xbS"/>
-                                                        <constraint firstAttribute="bottom" secondItem="juh-8V-Isf" secondAttribute="bottom" constant="1" id="UW7-U5-DHB"/>
-                                                        <constraint firstItem="kJb-9B-oVK" firstAttribute="leading" secondItem="9BQ-B2-RwU" secondAttribute="leading" id="Ulm-X9-LuE"/>
-                                                        <constraint firstAttribute="trailing" secondItem="juh-8V-Isf" secondAttribute="trailing" id="b1f-ck-bxp"/>
+                                                        <constraint firstItem="juh-8V-Isf" firstAttribute="top" secondItem="9BQ-B2-RwU" secondAttribute="top" id="B2k-b6-LEw"/>
+                                                        <constraint firstItem="kJb-9B-oVK" firstAttribute="top" secondItem="9BQ-B2-RwU" secondAttribute="top" constant="-1" id="MXQ-Fv-xbS"/>
+                                                        <constraint firstItem="kJb-9B-oVK" firstAttribute="leading" secondItem="9BQ-B2-RwU" secondAttribute="leading" constant="10" id="Ulm-X9-LuE"/>
                                                         <constraint firstAttribute="height" constant="81" id="efP-yl-Ovg"/>
                                                         <constraint firstAttribute="width" constant="100" id="esK-2C-p7X"/>
+                                                        <constraint firstItem="juh-8V-Isf" firstAttribute="leading" secondItem="9BQ-B2-RwU" secondAttribute="leading" constant="10" id="mC7-rL-88d"/>
                                                     </constraints>
                                                 </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" tag="104" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Pizza-1" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="104" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XL3-gA-LyF">
@@ -935,7 +935,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="3eb-Yi-QOk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1177" y="3063"/>
+            <point key="canvasLocation" x="1176.8" y="3062.5187406296855"/>
         </scene>
         <!--Restaurant Info View Controller-->
         <scene sceneID="ATz-4f-eGq">
@@ -2060,7 +2060,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.0" colorSpace="calibratedRGB"/>
                         <color key="tintColor" red="0.92549019610000005" green="0.30588235289999999" blue="0.1058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="0.1450980392" green="0.1450980392" blue="0.1450980392" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="barTintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <color key="selectedImageTintColor" red="0.92549019610000005" green="0.30588235289999999" blue="0.1058823529" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="color" keyPath="tintColor">
@@ -3225,25 +3225,25 @@ Cancellations can be applied after a full billing cycle.</string>
                                                     <subviews>
                                                         <imageView userInteractionEnabled="NO" tag="103" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Splash.png" translatesAutoresizingMaskIntoConstraints="NO" id="i7B-2t-vxu">
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="73" id="1yg-BM-C5r"/>
-                                                                <constraint firstAttribute="width" constant="73" id="zVx-es-iol"/>
+                                                                <constraint firstAttribute="height" constant="80" id="1yg-BM-C5r"/>
+                                                                <constraint firstAttribute="width" constant="80" id="zVx-es-iol"/>
                                                             </constraints>
                                                         </imageView>
                                                         <imageView userInteractionEnabled="NO" tag="110" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="registeredIndicator.png" translatesAutoresizingMaskIntoConstraints="NO" id="mdD-u7-NC6">
                                                             <constraints>
-                                                                <constraint firstAttribute="height" constant="60" id="HXB-uj-MVo"/>
-                                                                <constraint firstAttribute="width" constant="60" id="pyN-5f-m6b"/>
+                                                                <constraint firstAttribute="height" constant="50" id="HXB-uj-MVo"/>
+                                                                <constraint firstAttribute="width" constant="50" id="pyN-5f-m6b"/>
                                                             </constraints>
                                                         </imageView>
                                                     </subviews>
                                                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="81" id="3qo-Rx-WS3"/>
                                                         <constraint firstAttribute="trailing" secondItem="i7B-2t-vxu" secondAttribute="trailing" id="DDo-gQ-1PH"/>
+                                                        <constraint firstItem="mdD-u7-NC6" firstAttribute="leading" secondItem="FoN-Px-3cy" secondAttribute="leading" constant="10" id="GGa-am-sFt"/>
                                                         <constraint firstAttribute="bottom" secondItem="i7B-2t-vxu" secondAttribute="bottom" constant="1" id="Sfp-Ab-A7V"/>
-                                                        <constraint firstAttribute="width" constant="100" id="bCM-0L-Ewj"/>
-                                                        <constraint firstItem="mdD-u7-NC6" firstAttribute="leading" secondItem="FoN-Px-3cy" secondAttribute="leading" id="fDe-b7-ciY"/>
-                                                        <constraint firstItem="mdD-u7-NC6" firstAttribute="top" secondItem="FoN-Px-3cy" secondAttribute="top" id="zAS-i1-B26"/>
+                                                        <constraint firstItem="i7B-2t-vxu" firstAttribute="leading" secondItem="FoN-Px-3cy" secondAttribute="leading" constant="10" id="X6N-1N-y2R"/>
+                                                        <constraint firstItem="mdD-u7-NC6" firstAttribute="top" secondItem="FoN-Px-3cy" secondAttribute="top" constant="-1" id="dIT-x1-KHq"/>
+                                                        <constraint firstItem="i7B-2t-vxu" firstAttribute="top" secondItem="FoN-Px-3cy" secondAttribute="top" constant="1" id="zrV-44-8UW"/>
                                                     </constraints>
                                                 </view>
                                                 <imageView userInteractionEnabled="NO" tag="105" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vsP-LD-b8I" userLabel="rating">
@@ -3352,7 +3352,7 @@ Cancellations can be applied after a full billing cycle.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fvY-Jo-6UJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1204" y="2221.4392803598203"/>
+            <point key="canvasLocation" x="1177" y="2222"/>
         </scene>
     </scenes>
     <resources>
