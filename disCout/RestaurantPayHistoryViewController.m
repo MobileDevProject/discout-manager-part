@@ -9,7 +9,9 @@
 #import "AppDelegate.h"
 #import "SWRevealViewController.h"
 #import "RestaurantPayHistoryViewController.h"
+#import "PayHistoryCollectionReusableView.h"
 #import <SDWebImage/UIImageView+WebCache.h>
+#import "MBProgressHUD.h"
 @interface RestaurantPayHistoryViewController ()
 {
     AppDelegate *app;
@@ -34,9 +36,6 @@
     [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"MyCard_Active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setImage:[[UIImage imageNamed:@"MyCard_InActive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setTitle:@"MY CARD"];
-//    [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"MyCard_Active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-//    [self.tabBarItem setImage:[[UIImage imageNamed:@"MyCard_InActive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-//    [self.tabBarItem setTitle:@"MY CARD"];
     [self.imgPhoto sd_setImageWithURL:app.user.photoURL placeholderImage:[UIImage imageNamed:@"person0.jpg"]];
     
     
@@ -50,32 +49,55 @@
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath{
-    
     static NSString *identifier = @"payCell";
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     UILabel *date = (UILabel *)[cell viewWithTag:101];
     UILabel *Amount = (UILabel *)[cell viewWithTag:102];
     UILabel *memberShip = (UILabel *)[cell viewWithTag:103];
-    NSDictionary *PersonPayData = [[app.arrPayDictinaryData objectAtIndex:indexPath.section] objectForKey:@"pay info"];
-    NSString *datetext = [NSString stringWithFormat:@"%@", [[PersonPayData allKeys] objectAtIndex:indexPath.row]] ;
-    datetext = [NSString stringWithFormat:@"%@/%@/%@",[datetext substringWithRange:NSMakeRange(5, 2)], [datetext substringWithRange:NSMakeRange(8, 2)], [datetext substringWithRange:NSMakeRange(0, 4)]];
-    date.text = datetext;
-    NSString *amount = [PersonPayData objectForKey:[[PersonPayData allKeys] objectAtIndex:indexPath.row]];
+    NSDictionary *payDic = [app.arrPayDictinaryData objectAtIndex:indexPath.section];
+    NSArray *payData = [payDic objectForKey:@"pay info"];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
+     ;
+    NSString* amount =(NSString*)[[payData objectAtIndex:indexPath.row]objectForKey:@"amount"];
     Amount.text =  [NSString stringWithFormat:@"$%@",amount];
-    
-    memberShip.text = [NSString stringWithFormat:@"$%@ / Month : %d%%", amount, 2*[amount intValue]];
+    NSDate *datePay = (NSDate*)[[payData objectAtIndex:indexPath.row] objectForKey:@"date"];
+    memberShip.text = [NSString stringWithFormat:@"$%@ / Month : %d%%", amount,2*[amount intValue]];
+    date.text = [dateFormatter stringFromDate: datePay];
+    NSString* tam= date.text;
     return  cell;
-    
+
 }
 
-//- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath{
-//    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-//    RestaurantPayHistoryViewController *restaurantInfoViewController = [storyboard instantiateViewControllerWithIdentifier:@"RestaurantPayHistoryViewController"];
-//    [self.navigationController pushViewController:restaurantInfoViewController animated:YES];
-//}
 
 - (CGFloat)collectionView: (UICollectionView*)collectionView layout:(nonnull UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section{
     return 5;
+}
+- (UICollectionReusableView*)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    UICollectionReusableView *reusableview = nil;
+    //hederview processig
+    if (kind == UICollectionElementKindSectionHeader) {
+        NSURL *photoURL;
+        NSString *name = [[app.arrPayDictinaryData objectAtIndex:indexPath.section] objectForKey:@"name"];
+        if ([[app.arrPayDictinaryData objectAtIndex:indexPath.section] objectForKey:@"photourl"]) {
+            photoURL = [[NSURL alloc]initWithString:[[app.arrPayDictinaryData objectAtIndex:indexPath.section] objectForKey:@"photourl"]];
+        }
+        
+        PayHistoryCollectionReusableView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"payheaerview" forIndexPath:indexPath];
+        headerView.lableName.text = name;
+        [headerView.imagePhoto sd_setImageWithURL:photoURL placeholderImage:[UIImage imageNamed:@"person0.jpg"]];
+        
+        reusableview = headerView;
+    }
+    
+//    if (kind == UICollectionElementKindSectionFooter) {
+//        UICollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
+//        
+//        reusableview = footerview;
+//    }
+    
+    return reusableview;
 }
 - (IBAction)goSideMenu:(UIButton *)sender {
     [self.navigationController.revealViewController rightRevealToggle:nil];

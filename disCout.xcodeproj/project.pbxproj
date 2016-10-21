@@ -49,6 +49,7 @@
 		F34155151D76D238002CB9E4 /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = F34155041D76D238002CB9E4 /* Splash.png */; };
 		F34155161D76D238002CB9E4 /* timer.png in Resources */ = {isa = PBXBuildFile; fileRef = F34155051D76D238002CB9E4 /* timer.png */; };
 		F34155171D76D238002CB9E4 /* UserNameTextField.png in Resources */ = {isa = PBXBuildFile; fileRef = F34155061D76D238002CB9E4 /* UserNameTextField.png */; };
+		F36A1DF41DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F36A1DF31DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.m */; };
 		F36BB1AC1D972947007DDAE7 /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = F36BB1AB1D972947007DDAE7 /* check.png */; };
 		F3764D081D85A4CE006790FC /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F3764D071D85A4CE006790FC /* MBProgressHUD.m */; };
 		F3764D0A1D85E3F9006790FC /* registeredIndicator.png in Resources */ = {isa = PBXBuildFile; fileRef = F3764D091D85E3F9006790FC /* registeredIndicator.png */; };
@@ -207,6 +208,8 @@
 		F34155041D76D238002CB9E4 /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Splash.png; sourceTree = "<group>"; };
 		F34155051D76D238002CB9E4 /* timer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer.png; sourceTree = "<group>"; };
 		F34155061D76D238002CB9E4 /* UserNameTextField.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UserNameTextField.png; sourceTree = "<group>"; };
+		F36A1DF21DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PayHistoryCollectionReusableView.h; sourceTree = "<group>"; };
+		F36A1DF31DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayHistoryCollectionReusableView.m; sourceTree = "<group>"; };
 		F36BB1AB1D972947007DDAE7 /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
 		F3764D061D85A4CE006790FC /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MBProgressHUD.h; path = ../../MBProgressHUD.h; sourceTree = "<group>"; };
 		F3764D071D85A4CE006790FC /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MBProgressHUD.m; path = ../../MBProgressHUD.m; sourceTree = "<group>"; };
@@ -426,6 +429,7 @@
 				F32C317B1D3FFDD700D0D78D /* AppDelegate.m */,
 				F3C9CF871D955CD20055F5FA /* model */,
 				F3C9CF961D95E4C40055F5FA /* ViewControllers */,
+				F36A1DF11DB90CF50091E7D0 /* Views */,
 				F3C9CF971D95E5120055F5FA /* Resources */,
 				F3C9CF901D95BB610055F5FA /* library */,
 				F32C31881D3FFDD700D0D78D /* Info.plist */,
@@ -524,6 +528,15 @@
 				F34155061D76D238002CB9E4 /* UserNameTextField.png */,
 			);
 			path = png;
+			sourceTree = "<group>";
+		};
+		F36A1DF11DB90CF50091E7D0 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F36A1DF21DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.h */,
+				F36A1DF31DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.m */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		F39ED6731D5D610B00E072CF /* Yelp */ = {
@@ -1109,6 +1122,7 @@
 				F3F7412B1DAD20CC0050E10C /* Annotation.m in Sources */,
 				F32C31BA1D4023DA00D0D78D /* SignUp.m in Sources */,
 				F39ED6A81D5D610C00E072CF /* OADataFetcher.m in Sources */,
+				F36A1DF41DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.m in Sources */,
 				F39ED6A11D5D610C00E072CF /* NSString+URLEncoding.m in Sources */,
 				F39ED6B11D5D610C00E072CF /* YPAPISample.m in Sources */,
 				F39ED6A51D5D610C00E072CF /* sha1.c in Sources */,
@@ -1284,7 +1298,7 @@
 				INFOPLIST_FILE = disCout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nazrin.discout;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nazrin.discout.manager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "disCout/disCout-Bridging-Header.h";
@@ -1303,7 +1317,7 @@
 				INFOPLIST_FILE = disCout/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.nazrin.discout;
+				PRODUCT_BUNDLE_IDENTIFIER = com.nazrin.discout.manager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "disCout/disCout-Bridging-Header.h";
