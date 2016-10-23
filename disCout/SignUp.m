@@ -184,8 +184,6 @@
                              app.user.userId = [Request currentUserUid];
                              app.user.name = self.textUserName.text;
                              app.user.email = self.textEmail.text;
-                             app.user.isCancelled = @"false";
-                             [Request cancelMembership];
                              //current photo save
                              if (self.btnPhoto.currentBackgroundImage) {
                                 
@@ -251,8 +249,8 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+     Get the new view controller using [segue destinationViewController].
+     Pass the selected object to the new view controller.
 }
 */
 
@@ -264,7 +262,6 @@
     if (!image1) {
         [self.btnPhoto setBackgroundImage:[UIImage imageNamed:@"person0.jpg"] forState:UIControlStateNormal];
     }
-    //[self.btnPhoto setBackgroundImage:[UIImage imageNamed:@"person0.jpg"] forState:UIControlStateNormal];
 }
 
 

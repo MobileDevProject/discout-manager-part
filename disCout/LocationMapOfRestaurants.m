@@ -23,7 +23,6 @@
 #define METERS_PER_MILE 1609.344
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (strong, nonatomic) IBOutlet UISlider *slideControlDistance;
 @property(nonatomic,strong) CLLocationManager *locationManager;
 @property(nonatomic,strong) NSMutableArray *annotations;
 @property BOOL mapDidLoadForFirstTime;
@@ -101,20 +100,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (IBAction)ChangeDistanceSearch:(UISlider *)sender {
-    
-    [self.searchRadius setFrame:CGRectMake(self.searchRadius.frame.origin.x - sender.frame.size.width/100.0f, self.searchRadius.frame.origin.x, self.searchRadius.frame.size.width, self.searchRadius.frame.size.height)];
-    preValue = sender.value;
-    if ((int)(sender.value) % 5 == 0) {
-        [mapView removeOverlay:[[mapView overlays] firstObject]];
-        float lati = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"latitude"] floatValue];
-        float longgi = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"longitude"] floatValue];
-        CLLocationCoordinate2D circleMiddlePoint = CLLocationCoordinate2DMake(lati, longgi);
-        MKCircle *circle = [MKCircle circleWithCenterCoordinate:circleMiddlePoint radius:sender.value*300];
-        [mapView addOverlay: circle];
-    }
 
-}
 - (void)viewWillAppear:(BOOL)animated{
     _app = [UIApplication sharedApplication].delegate;
     arrRestaurantData = [[NSMutableArray alloc]init];
@@ -156,11 +142,11 @@
     }
     float lati = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"latitude"] floatValue];
     float longgi = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"longitude"] floatValue];
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(CLLocationCoordinate2DMake(lati, longgi), 500, 500);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(CLLocationCoordinate2DMake(lati, longgi), 2500, 2500);
     [self.mapView setRegion:region animated:YES];
     [mapView removeOverlay:[[mapView overlays] firstObject]];
     CLLocationCoordinate2D circleMiddlePoint = CLLocationCoordinate2DMake(lati, longgi);
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:circleMiddlePoint radius:300];
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:circleMiddlePoint radius:1500];
     [mapView addOverlay: circle];
 
 }

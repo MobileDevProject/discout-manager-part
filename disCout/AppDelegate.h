@@ -32,6 +32,7 @@
 @property(nonatomic, retain)NSMutableArray* arrSelectedCuisine;
 
 //user info
+@property(nonatomic, retain) FIRUser *userAccount;
 @property(nonatomic, retain) NSString *UserName;
 @property(nonatomic, retain) NSString *UserID;
 @property(nonatomic, retain) NSString *UserPhotoURL;

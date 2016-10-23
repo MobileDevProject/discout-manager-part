@@ -15,6 +15,12 @@
 + (NSString*)currentUserUid;
 + (void)saveUserEmail:email;
 + (void)saveUserName:name;
+//manager
++ (NSError*)saveManagerCardInfo:number cvid:cvid date:date;
++ (void)saveManagerEmail:email;
++ (void)saveManagerName:name;
++ (void)upDateManagerAccount:mangerID email:email name:name;
+
 + (NSError*)saveCardInfo:number cvid:cvid date:date membership:membership;
 + (void)cancelMembership;
 //+ (NSError)

@@ -10,7 +10,6 @@
 		0C7FDD83A03BE6C288B53AB9 /* libPods-disCout.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2218543827B3CF90685D3D00 /* libPods-disCout.a */; };
 		74F5918CEF6A06EF6038954E /* libPods-disCoutTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A8F648BA9655EB7F461F02D8 /* libPods-disCoutTests.a */; };
 		948458A8843168129435EE9C /* libPods-disCoutUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F1D17BC131A92C0419863AC /* libPods-disCoutUITests.a */; };
-		F319D0341D97F0490078A472 /* barCode.png in Resources */ = {isa = PBXBuildFile; fileRef = F319D0311D97F0490078A472 /* barCode.png */; };
 		F319D0351D97F0490078A472 /* registerMark.png in Resources */ = {isa = PBXBuildFile; fileRef = F319D0321D97F0490078A472 /* registerMark.png */; };
 		F319D0361D97F0490078A472 /* unregisterMark.png in Resources */ = {isa = PBXBuildFile; fileRef = F319D0331D97F0490078A472 /* unregisterMark.png */; };
 		F319D0381D97F4510078A472 /* payInfo.png in Resources */ = {isa = PBXBuildFile; fileRef = F319D0371D97F4510078A472 /* payInfo.png */; };
@@ -21,6 +20,7 @@
 		F319D0491D985FF00078A472 /* CreditCard-Validator.m in Sources */ = {isa = PBXBuildFile; fileRef = F319D0481D985FF00078A472 /* CreditCard-Validator.m */; };
 		F319D04F1D98758D0078A472 /* actvatedRestaurantListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F319D04E1D98758D0078A472 /* actvatedRestaurantListViewController.m */; };
 		F319D0511D98BD960078A472 /* person0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F319D0501D98BD960078A472 /* person0.jpg */; };
+		F319F3F71DBABC0700BF9326 /* ChangeAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F319F3F61DBABC0700BF9326 /* ChangeAccountViewController.m */; };
 		F32C31791D3FFDD700D0D78D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F32C31781D3FFDD700D0D78D /* main.m */; };
 		F32C317C1D3FFDD700D0D78D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F32C317B1D3FFDD700D0D78D /* AppDelegate.m */; };
 		F32C31821D3FFDD700D0D78D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F32C31801D3FFDD700D0D78D /* Main.storyboard */; };
@@ -49,6 +49,7 @@
 		F34155151D76D238002CB9E4 /* Splash.png in Resources */ = {isa = PBXBuildFile; fileRef = F34155041D76D238002CB9E4 /* Splash.png */; };
 		F34155161D76D238002CB9E4 /* timer.png in Resources */ = {isa = PBXBuildFile; fileRef = F34155051D76D238002CB9E4 /* timer.png */; };
 		F34155171D76D238002CB9E4 /* UserNameTextField.png in Resources */ = {isa = PBXBuildFile; fileRef = F34155061D76D238002CB9E4 /* UserNameTextField.png */; };
+		F34FE5991DBCBA04005B31EF /* barCode.png in Resources */ = {isa = PBXBuildFile; fileRef = F34FE5981DBCBA04005B31EF /* barCode.png */; };
 		F36A1DF41DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.m in Sources */ = {isa = PBXBuildFile; fileRef = F36A1DF31DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.m */; };
 		F36BB1AC1D972947007DDAE7 /* check.png in Resources */ = {isa = PBXBuildFile; fileRef = F36BB1AB1D972947007DDAE7 /* check.png */; };
 		F3764D081D85A4CE006790FC /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F3764D071D85A4CE006790FC /* MBProgressHUD.m */; };
@@ -156,7 +157,6 @@
 		9A04423CCBE430652FB86599 /* Pods-disCoutUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-disCoutUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-disCoutUITests/Pods-disCoutUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		A8F648BA9655EB7F461F02D8 /* libPods-disCoutTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-disCoutTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFE069ACF55A5F0DE530AA33 /* Pods-disCout.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-disCout.release.xcconfig"; path = "Pods/Target Support Files/Pods-disCout/Pods-disCout.release.xcconfig"; sourceTree = "<group>"; };
-		F319D0311D97F0490078A472 /* barCode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barCode.png; sourceTree = "<group>"; };
 		F319D0321D97F0490078A472 /* registerMark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = registerMark.png; sourceTree = "<group>"; };
 		F319D0331D97F0490078A472 /* unregisterMark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unregisterMark.png; sourceTree = "<group>"; };
 		F319D0371D97F4510078A472 /* payInfo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = payInfo.png; sourceTree = "<group>"; };
@@ -171,6 +171,8 @@
 		F319D04D1D98758D0078A472 /* actvatedRestaurantListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = actvatedRestaurantListViewController.h; sourceTree = "<group>"; };
 		F319D04E1D98758D0078A472 /* actvatedRestaurantListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = actvatedRestaurantListViewController.m; sourceTree = "<group>"; };
 		F319D0501D98BD960078A472 /* person0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = person0.jpg; sourceTree = "<group>"; };
+		F319F3F51DBABC0700BF9326 /* ChangeAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChangeAccountViewController.h; sourceTree = "<group>"; };
+		F319F3F61DBABC0700BF9326 /* ChangeAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChangeAccountViewController.m; sourceTree = "<group>"; };
 		F32C31741D3FFDD700D0D78D /* disCout.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = disCout.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F32C31781D3FFDD700D0D78D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F32C317A1D3FFDD700D0D78D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 		F34155041D76D238002CB9E4 /* Splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Splash.png; sourceTree = "<group>"; };
 		F34155051D76D238002CB9E4 /* timer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = timer.png; sourceTree = "<group>"; };
 		F34155061D76D238002CB9E4 /* UserNameTextField.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = UserNameTextField.png; sourceTree = "<group>"; };
+		F34FE5981DBCBA04005B31EF /* barCode.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = barCode.png; sourceTree = "<group>"; };
 		F36A1DF21DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PayHistoryCollectionReusableView.h; sourceTree = "<group>"; };
 		F36A1DF31DB90D4B0091E7D0 /* PayHistoryCollectionReusableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PayHistoryCollectionReusableView.m; sourceTree = "<group>"; };
 		F36BB1AB1D972947007DDAE7 /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
@@ -479,8 +482,8 @@
 				F319D0501D98BD960078A472 /* person0.jpg */,
 				F319D03B1D980BB40078A472 /* checkOrange.png */,
 				F319D0391D97F6690078A472 /* payBack.png */,
+				F34FE5981DBCBA04005B31EF /* barCode.png */,
 				F319D0371D97F4510078A472 /* payInfo.png */,
-				F319D0311D97F0490078A472 /* barCode.png */,
 				F319D0321D97F0490078A472 /* registerMark.png */,
 				F319D0331D97F0490078A472 /* unregisterMark.png */,
 				F3FED38F1D977BD500EE32B2 /* Timer_Acitve.png */,
@@ -699,6 +702,8 @@
 				F32C31B91D4023DA00D0D78D /* SignUp.m */,
 				F3B676051DA8E0A900407344 /* OfferViewController.h */,
 				F3B676061DA8E0A900407344 /* OfferViewController.m */,
+				F319F3F51DBABC0700BF9326 /* ChangeAccountViewController.h */,
+				F319F3F61DBABC0700BF9326 /* ChangeAccountViewController.m */,
 			);
 			name = login;
 			sourceTree = "<group>";
@@ -887,7 +892,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F319D0341D97F0490078A472 /* barCode.png in Resources */,
 				F319D0511D98BD960078A472 /* person0.jpg in Resources */,
 				F34155151D76D238002CB9E4 /* Splash.png in Resources */,
 				F341550B1D76D238002CB9E4 /* changeMapList.png in Resources */,
@@ -904,6 +908,7 @@
 				F34155161D76D238002CB9E4 /* timer.png in Resources */,
 				F34155141D76D238002CB9E4 /* Search_InActive.png in Resources */,
 				F34155091D76D238002CB9E4 /* call.png in Resources */,
+				F34FE5991DBCBA04005B31EF /* barCode.png in Resources */,
 				F34155121D76D238002CB9E4 /* Pin.png in Resources */,
 				F34155071D76D238002CB9E4 /* Activity_Active.png in Resources */,
 				F3FE534E1DB14B5C00FDF856 /* profile.png in Resources */,
@@ -1147,6 +1152,7 @@
 				F319D03F1D9818EC0078A472 /* RestaurantPayHistoryViewController.m in Sources */,
 				F39ED6B01D5D610C00E072CF /* OATokenManager.m in Sources */,
 				F319D0451D98270B0078A472 /* Request.m in Sources */,
+				F319F3F71DBABC0700BF9326 /* ChangeAccountViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

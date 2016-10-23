@@ -17,6 +17,8 @@
 
 {
     int childCount;
+    AppDelegate* app;
+    NSString* checkMail;
 }
 
 @property (weak, nonatomic) IBOutlet UITextField *txtFieldEmail;
@@ -30,34 +32,60 @@
 @implementation Login
 
 -(void)viewDidLoad{
-    AppDelegate *app = [UIApplication sharedApplication].delegate;
-    //[Request retrieveAllRestaurantsID];
+    app = [UIApplication sharedApplication].delegate;
+    
     NSDictionary * attributes = (NSMutableDictionary *)[ (NSAttributedString *)self.txtFieldEmail.attributedPlaceholder attributesAtIndex:0 effectiveRange:NULL];
     NSMutableDictionary * newAttributes = [[NSMutableDictionary alloc] initWithDictionary:attributes];
     [newAttributes setObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
     self.txtFieldEmail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[self.txtFieldEmail.attributedPlaceholder string] attributes:newAttributes];
     self.txtFieldPassword.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[self.txtFieldPassword.attributedPlaceholder string] attributes:newAttributes];
+    [self getCheckMail];
+}
+-(void) getCheckMail{
     FIRUser *user = [Request currentUser];
     if (user !=nil) {
-        ///////////////***********************************************************************************
-        //Manager Module
-        NSString *email = [Request currentUser].email;
-        app.isManager = NO;
-        if ([email isEqualToString:@"mera.lahid@yandex.com"]) {
-            app.isManager = YES;
-            [self loadResDataAndGo];
-        }else{
-            NSError *error;
-            [[FIRAuth auth] signOut:&error];
-            //[self loadUserDataAndGo];
-        }
-        ///////////////***********************************************************************************
-        //[self loadUserDataAndGo];
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self.view setUserInteractionEnabled:NO];
+        // get compared mail <checkMail>
+        FIRDatabaseReference* refManger = [[[FIRDatabase database] reference] child:@"manager"];
+        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            //[self loadResData];
+            [refManger observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                NSDictionary*dic = snapshot.value;
+                NSArray *keys;
+                if (![dic isKindOfClass:[NSNull class]]) {
+                    keys = dic.allKeys;
+                }
+                checkMail = [[dic objectForKey:[keys firstObject]] objectForKey:@"email"];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{///////
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    [self.view setUserInteractionEnabled:YES];
+                    
+                    
+                    
+                    ///////////////***********************************************************************************
+                    //Manager Module
+                    NSString *email = [Request currentUser].email;
+                    app.isManager = NO;
+                    if ([email isEqualToString:checkMail]) {
+                        app.isManager = YES;
+                        app.userAccount = [FIRAuth auth].currentUser;
+                        [self loadResDataAndGo];
+                        
+                    }else{
+                        NSError *error;
+                        [[FIRAuth auth] signOut:&error];
+                        //[self loadUserDataAndGo];
+                    }
+                    ///////////////***********************************************************************************
+                    //[self loadUserDataAndGo];
+                    
+                });
+            }];
+        });//Add MBProgressBar (dispatch)
     }
-
 }
-
-
 - (IBAction)goFromLogin:(id)sender {
 
     
@@ -144,15 +172,7 @@
                                                  if (error==nil) {
                                                      [MBProgressHUD hideHUDForView:self.view animated:YES];/////
                                                      [self.view setUserInteractionEnabled:YES];
-                                                     NSString *email = [Request currentUser].email;
-                                                     AppDelegate *app = [UIApplication sharedApplication].delegate;
-                                                     app.isManager = NO;
-                                                     if ([email isEqualToString:@"mera.lahid@yandex.com"]) {
-                                                         app.isManager = YES;
-                                                         [self loadResDataAndGo];
-                                                     }else{
-                                                         //[self loadUserDataAndGo];
-                                                     }
+                                                     [self getCheckMail];
                                                      
                                                  }
                                              });
@@ -222,9 +242,7 @@
     }];
     
     [self presentViewController:requestResetPass animated:YES completion:nil];
-                                           
-    
-    
+
 }
 
 -(void)playSound:fileName{
@@ -259,6 +277,10 @@
 }
 - (void)viewWillAppear:(BOOL)animated{
     [self.view setUserInteractionEnabled:YES];
+    if (app.user.email !=nil) {
+        self.txtFieldEmail.text = app.user.email;
+        //self.txtFieldPassword.text = app.user.userId;
+    }
 }
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -266,7 +288,7 @@
 }
 
 - (void)loadUserDataAndGo{
-    AppDelegate *app = [UIApplication sharedApplication].delegate;
+    app = [UIApplication sharedApplication].delegate;
     app.user.userId = [NSString stringWithFormat:@"%@", [Request currentUserUid]];
     app.arrPayDictinaryData = [[NSMutableArray alloc]init];
     
@@ -334,7 +356,7 @@
 }
 
 -(void)loadResData{
-    AppDelegate *app = [UIApplication sharedApplication].delegate;
+    app = [UIApplication sharedApplication].delegate;
     app.arrRegisteredDictinaryRestaurantData = [[NSMutableArray alloc]init];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -361,7 +383,7 @@
 }
 
 - (void)loadResDataAndGo{
-    AppDelegate *app = [UIApplication sharedApplication].delegate;
+    app = [UIApplication sharedApplication].delegate;
     app.arrRegisteredDictinaryRestaurantData = [[NSMutableArray alloc]init];
     app.arrPayDictinaryData = [[NSMutableArray alloc]init];
     [self.view setUserInteractionEnabled:NO];
@@ -383,6 +405,9 @@
                         NSDictionary *restaurantData = [dic objectForKey:[keys objectAtIndex:countData]];
                         [app.arrRegisteredDictinaryRestaurantData addObject:restaurantData];
                     }
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [app addTabBar];
+                    });
                 }else{
                     UIAlertController * loginErrorAlert = [UIAlertController
                                                            alertControllerWithTitle:@"Cannot find restaurant info"
@@ -436,7 +461,7 @@
                     NSDictionary* PersonPayData = [[NSDictionary alloc]initWithObjectsAndKeys:userName, @"name", dataarray,@"pay info", userPhotoURL,@"photourl",  nil];
                     [app.arrPayDictinaryData addObject:PersonPayData];
                     }
-                
+
                 }];
 
             //get manager data
@@ -445,7 +470,10 @@
             FIRDatabaseReference *refManagerInfor = [[[Request dataref] child:@"manager"]child: userID];
             //FIRDatabaseReference *ref = [Request dataref];
             [refManagerInfor observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                
+                    
+                
+                    
                 if (snapshot.exists) {
                     app.user.name = [(NSDictionary*)(snapshot.value) objectForKey:@"name"];
                     app.user.userId = userID;
@@ -454,7 +482,7 @@
                     app.user.cardCVID = [(NSDictionary*)(snapshot.value) objectForKey:@"cardcvid"];
                     app.user.cardDate = [(NSDictionary*)(snapshot.value) objectForKey:@"carddate"];
                     app.user.cardNumber = [(NSDictionary*)(snapshot.value) objectForKey:@"cardnumber"];
-                    [app addTabBar];
+                    
             
             
                 }else{
@@ -476,7 +504,7 @@
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                     [self.view setUserInteractionEnabled:YES];
                     
-                });
+                
             }];
         });
     

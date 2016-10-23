@@ -39,6 +39,11 @@
 @property (strong, nonatomic) IBOutlet UIImageView *registerMarkImage;
 @property (strong, nonatomic) IBOutlet UIButton *registerButton;
 @property (nonatomic, strong) webViewController* webViewVC;
+@property (strong, nonatomic) IBOutlet UIImageView *imgRating;
+@property (strong, nonatomic) IBOutlet UILabel *lblResName;
+@property (strong, nonatomic) IBOutlet UILabel *lblResAddress;
+@property (strong, nonatomic) IBOutlet UILabel *lblResCategories;
+@property (strong, nonatomic) IBOutlet UILabel *lblResReviewNumber;
 
 @end
 
@@ -63,16 +68,20 @@
     ResCategories = [dicRestaurantData objectForKey: @"categories"];
     ResRating = [dicRestaurantData objectForKey: @"rating"];
     ResSnippetText = [dicRestaurantData objectForKey: @"snnipet_text"];
-    
+    ResReviewCount = [dicRestaurantData objectForKey: @"review_count"];
     ResSnnipetImageURL = [dicRestaurantData objectForKey: @"image_url"];
     ResRatingImageURL = [dicRestaurantData objectForKey: @"rating_img_url"];
     
     [self.imgRestaurnat sd_setImageWithURL:[NSURL URLWithString:ResSnnipetImageURL]
                           placeholderImage:[UIImage imageNamed:@"Splash.png"]];
-    
+    [self.imgRating sd_setImageWithURL:[NSURL URLWithString:ResRatingImageURL]
+                          placeholderImage:[UIImage imageNamed:@"Splash.png"]];
     //check if the restaurant is registered in user database.
     [self.registerMarkImage setImage:[UIImage imageNamed:@"unregisterMark.png"]];
-    
+    self.lblResName.text = ResName;
+    self.lblResAddress.text = ResAddress;
+    self.lblResCategories.text = ResCategories;
+    self.lblResReviewNumber.text =[NSString stringWithFormat:@"%@ reviews", ResReviewCount] ;
     
     for (int count1 = 0;app.arrRegisteredDictinaryRestaurantData.count>count1;count1++) {
         if ([[[app.arrRegisteredDictinaryRestaurantData objectAtIndex:count1]objectForKey:@"name"] isEqualToString:ResName]) {
