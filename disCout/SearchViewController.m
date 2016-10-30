@@ -33,6 +33,7 @@
     __weak IBOutlet UIView *viewSelectCuisine;
     __weak IBOutlet UICollectionView *tableCuisine;
     __weak IBOutlet UIImageView *imgCheckSelectAll;
+    IBOutlet UILabel *lblMSelectedCuisineType;
     int count;
 }
 
@@ -44,6 +45,7 @@
     app = [UIApplication sharedApplication].delegate;
     arrCuisine = [[NSMutableArray alloc]init];
     arrCuisine = app.arrCuisine;
+    lblMSelectedCuisineType.text = @"All";
     
     arrSelectedCuisine = [[NSMutableArray alloc]init];
     arrSelectedCuisine = app.arrSelectedCuisine;
@@ -213,10 +215,7 @@
             [self.view setUserInteractionEnabled:YES];
             });
         } else if (searchResponseJSON) {
-            //[[[FIRDatabase database] reference] setValue:searchResponseJSON forKey:@"num"];
-                NSData *jsonData = [NSJSONSerialization dataWithJSONObject:searchResponseJSON options:NSJSONWritingPrettyPrinted error:nil];
-                NSString * json = [[NSString alloc] initWithBytes:[jsonData bytes] length:[jsonData length] encoding:NSUTF8StringEncoding];
-            [[[[[[[FIRDatabase database] reference] child:@"users"] child:[Request currentUserUid]]child:@"general info" ] child:@"name"] setValue:json];
+            
             NSMutableArray* businessArray = searchResponseJSON[@"businesses"];
             //[app.arrSearchedRestaurants arrayByAddingObjectsFromArray:businessArray];
             //app.arrSearchedRestaurants = app.businessArray;
@@ -351,10 +350,36 @@
 
 //close Cuisine filter window
 - (IBAction)selectFilterWindow:(UIButton *)sender {
+    //add
     [viewSelectCuisine setHidden:YES];
     [self.view sendSubviewToBack:viewSelectCuisine];
     app.arrSelectedCuisine =[[NSMutableArray alloc]initWithArray: arrSelectedCuisine];
-
+    if ([imgCheckSelectAll.image isEqual:[UIImage imageNamed:@"btn_Search_Active.png"]]) {
+        lblMSelectedCuisineType.text = @"All";
+    }else{
+        int numberOfSelectedSuisine = 0;
+        for (int count1 = 0;app.arrCuisine.count>count1;count1++) {
+            if ([[app.arrSelectedCuisine objectAtIndex:count1] isEqualToString:@"1"]) {
+                lblMSelectedCuisineType.text = [NSString stringWithFormat:@"%@...", [app.arrCuisine objectAtIndex:count1]];
+                numberOfSelectedSuisine++;
+                break;
+            }
+            
+        }
+        if (numberOfSelectedSuisine==0) {
+            lblMSelectedCuisineType.text = @"empty";
+            UIAlertController * loginErrorAlert = [UIAlertController
+                                                   alertControllerWithTitle:@"No Cuisine"
+                                                   message:@"You have selected no cuisine type to filter."
+                                                   preferredStyle:UIAlertControllerStyleAlert];
+            [self presentViewController:loginErrorAlert animated:YES completion:nil];
+            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+                
+            }];
+            [loginErrorAlert addAction:ok];
+        }
+    }
 }
 - (IBAction)closeFilterWindow:(id)sender {
     [viewSelectCuisine setHidden:YES];

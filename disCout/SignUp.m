@@ -12,6 +12,7 @@
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
 #import "OfferViewController.h"
+#import "Login.h"
 #import "SignUp.h"
 
 @interface SignUp ()<UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -193,7 +194,7 @@
                              [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
                              //go register card
                              UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                             SignUp *signUp = [storyboard instantiateViewControllerWithIdentifier:@"SignUp"];
+                             Login *signUp = [storyboard instantiateViewControllerWithIdentifier:@"Login"];
                              [self.navigationController pushViewController:signUp animated:YES];
                              //[app addTabBar];
                          }];

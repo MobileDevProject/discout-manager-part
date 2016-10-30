@@ -11,6 +11,7 @@
 #import "RestaurantInfoViewController.h"
 #import "restaurantListViewcontroller.h"
 #import "LocationMapOfRestaurants.h"
+#import "MapViewController.h"
 #import "MBProgressHUD.h"
 #import "SWRevealViewController.h"
 #import <SDWebImage/UIImageView+WebCache.h>
@@ -24,7 +25,6 @@
     NSMutableArray* registeredRestaurants;
     NSMutableArray *muarResName;
     NSSortDescriptor * descriptor;
-    
     //NSArray *businessArray;
     bool checkScroll;
     
@@ -44,6 +44,7 @@
     [self.tableResList setCanCancelContentTouches:NO];
    
 }
+
 - (void)viewWillAppear:(BOOL)animated{
     muarResName = [[NSMutableArray alloc]init];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
@@ -75,9 +76,12 @@
 }
 
 - (IBAction)ExchangeMap:(UIButton *)sender {
-    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-    LocationMapOfRestaurants *restaurantInfoViewController = [storyboard instantiateViewControllerWithIdentifier:@"LocationMapOfRestaurants"];
-    [self.navigationController pushViewController:restaurantInfoViewController animated:YES];
+    
+    
+    // pop back to previous controller
+    [self.navigationController popViewControllerAnimated:YES];
+    
+
 }
 - (IBAction)Sort:(UIButton *)sender {
     

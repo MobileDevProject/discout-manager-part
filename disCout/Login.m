@@ -56,7 +56,7 @@
                 if (![dic isKindOfClass:[NSNull class]]) {
                     keys = dic.allKeys;
                 }
-                checkMail = [[dic objectForKey:[keys firstObject]] objectForKey:@"email"];
+                checkMail = [[dic objectForKey:[keys lastObject]] objectForKey:@"email"];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{///////
                     [MBProgressHUD hideHUDForView:self.view animated:YES];

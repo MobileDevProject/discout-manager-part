@@ -7,7 +7,6 @@
 //
 #import "SWRevealViewController.h"
 #import "actvatedRestaurantListViewController.h"
-#import "LocationMapOfRestaurants.h"
 #import "SearchViewController.h"
 #import "MapViewController.h"
 #import "AllPayHistoryViewController.h"
@@ -33,7 +32,8 @@
     //self.dicSearchedDictionaryRestaurantData = [[NSDictionary alloc] init];
     
     //init condition
-    
+    self.intSearchOption1 = 1;
+    self.intSearchOption2 = 1;
     //1. init Cuisign type
     self.arrCuisine = [[NSArray alloc]initWithObjects:@"Restaurants", @"Mexican",@"Fast Food", @"Sandwiches", @"Food", @"Burgers", @"Pizza", @"American (Traditional)", @"Chinese", @"Chicken Wings", @"Nightlife", @"Seafood", @"Bars", @"Breakfast & Brunch", @"Italian", @"American (New)", @"Tex-Mex", @"Delis", @"Barbeque", @"Vietnamese", @"Cajun/Creole", @"Food Trucks", @"Salad", @"Cafes", @"Latin American", nil];
     self.user = [[UserInfo alloc]init];
@@ -47,28 +47,22 @@
     [self.arrSelectedCuisine setObject:@"1" atIndexedSubscript:self.arrSelectedCuisine.count];
     [application setStatusBarHidden:YES];
     // Add this if you only want to change Selected Image color
-    // and/or selected image text
-    
-    // Add this code to change StateNormal text Color,
-    [[UIView appearanceWhenContainedInInstancesOfClasses:[[NSArray alloc] initWithObjects:[UITabBar class],nil]] setTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
-    [UITabBar appearance].tintColor = [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0];
-    //[[UITabBarItem appearance] setBadgeColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
-    //[[UITabBar appearance] setTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+    [[UITabBar appearance] setUnselectedItemTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+
     
     [UITabBarItem.appearance setTitleTextAttributes:
      @{NSForegroundColorAttributeName : [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]}
                                            forState:UIControlStateNormal];
     
     
-    // then if StateSelected should be different, you should add this code
     [UITabBarItem.appearance setTitleTextAttributes:
      @{
-       NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
+       NSFontAttributeName: [UIFont fontWithName:@"Avenir" size:10],
        NSForegroundColorAttributeName: [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]
        } forState:UIControlStateSelected];
     [UITabBarItem.appearance setTitleTextAttributes:
      @{
-       NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
+       NSFontAttributeName: [UIFont fontWithName:@"Avenir" size:10],
        NSForegroundColorAttributeName: [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]
        } forState:UIControlStateNormal];
     return YES;

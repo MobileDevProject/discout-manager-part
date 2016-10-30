@@ -40,7 +40,7 @@
     app = [UIApplication sharedApplication].delegate;
     
     
-    checkScroll = false;    
+    checkScroll = false;
     [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"Activity_Active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setImage:[[UIImage imageNamed:@"Activity_Inactive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setTitle:@"ACTIVITY"];
@@ -52,6 +52,8 @@
                                               NSFontAttributeName: [UIFont fontWithName:@"Avenir Next LT Pro" size:10],
                                               NSForegroundColorAttributeName: [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]
                                               } forState:UIControlStateSelected];
+    
+
     
 }
 - (void)viewWillAppear:(BOOL)animated{

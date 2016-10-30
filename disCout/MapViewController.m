@@ -7,11 +7,12 @@
 //
 
 #import "MapViewController.h"
-#import "LocationMapOfRestaurants.h"
+#import "NearMeListViewController.h"
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
 #import "RestaurantInfoViewController.h"
 #import "actvatedRestaurantListViewController.h"
+#import "restaurantListViewcontroller.h"
 #import "SWRevealViewController.h"
 #import "AppDelegate.h"
 #import "Annotation.h"
@@ -23,10 +24,14 @@
     UIViewController *previousController;
     NSMutableArray *annotations;
     Boolean checkMyLocation;
+    MKUserLocation * MyCoordinate;
+    float currentRadius;
 }
 #define METERS_PER_MILE 1609.344
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
+@property (strong, nonatomic) IBOutlet UILabel *lblMDistance;
+@property (strong, nonatomic) IBOutlet UISlider *sliderMDistanceControl;
 @property(nonatomic,strong) CLLocationManager *locationManager;
 @property BOOL mapDidLoadForFirstTime;
 @property (nonatomic,retain) AppDelegate * app;
@@ -37,6 +42,8 @@
 @synthesize locationManager = _locationManager;
 - (void)viewDidLoad{
     checkMyLocation = YES;
+    //set the search radius as 1000m
+    currentRadius = 2000;
     mapView.delegate =self;
     [self.locationManager requestWhenInUseAuthorization];
     [self.locationManager startUpdatingLocation];
@@ -48,11 +55,17 @@
     self.mapView.rotateEnabled = YES;
     self.mapView.showsUserLocation = YES;
     
+    [self.sliderMDistanceControl setMaximumValue:100.0f];
+    [self.sliderMDistanceControl setMinimumValue:0.0f];
+    [self.sliderMDistanceControl setValue:20.0f animated:YES];
+    [self.sliderMDistanceControl setThumbTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+    [self.sliderMDistanceControl setTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+    [self ChangeMDistanceSearch:self.sliderMDistanceControl];
     
     self.app = [[UIApplication sharedApplication] delegate];
     // pop back to previous controller
     arrRestaurantData = [[NSMutableArray alloc]initWithArray:self.app.arrRegisteredDictinaryRestaurantData];
-
+    
     float lati = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"latitude"] floatValue];
     float longgi = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"longitude"] floatValue];
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(CLLocationCoordinate2DMake(lati, longgi), 2000, 2000);
@@ -127,9 +140,12 @@
 #pragma mark - MKMapViewDelegate
 - (void)mapView:(MKMapView *)mapView didUpdateUserLocation:(MKUserLocation *)userLocation
 {
-    //checkMyLocation = NO;
-    MKCoordinateRegion region = [self createViewableRegionForLocation:userLocation.coordinate andDistance:5.0f];
-    [self.mapView setRegion:region animated:YES];
+    MyCoordinate = userLocation;
+    if (checkMyLocation) {
+        MKCoordinateRegion region = [self createViewableRegionForLocation:userLocation.coordinate andDistance:2000/METERS_PER_MILE];
+        [self.mapView setRegion:region animated:YES];
+    }
+    checkMyLocation = NO;
     
 }
 - (MKCoordinateRegion)createViewableRegionForLocation:(CLLocationCoordinate2D)coordinate andDistance:(CLLocationDistance)distance
@@ -137,6 +153,14 @@
     CLLocationDirection latInMeters = distance*METERS_PER_MILE;
     CLLocationDirection longInMeters = distance*METERS_PER_MILE;
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(coordinate, latInMeters, longInMeters);
+    float lati = coordinate.latitude;
+    float longgi = coordinate.longitude ;
+    
+    
+    [mapView removeOverlay:[[mapView overlays] firstObject]];
+    CLLocationCoordinate2D circleMiddlePoint = CLLocationCoordinate2DMake(lati, longgi);
+    MKCircle *circle = [MKCircle circleWithCenterCoordinate:circleMiddlePoint radius:distance*METERS_PER_MILE];
+    [mapView addOverlay: circle];
     
     return region;
 }
@@ -158,7 +182,7 @@
     }else{
         
     }
-
+    
     return MyPin;
 }
 
@@ -184,19 +208,31 @@
     return circleView;
 }
 
-
+-(float)kilometersfromPlace:(CLLocationCoordinate2D)from andToPlace:(CLLocationCoordinate2D)to  {
+    
+    CLLocation *userloc = [[CLLocation alloc]initWithLatitude:from.latitude longitude:from.longitude];
+    CLLocation *dest = [[CLLocation alloc]initWithLatitude:to.latitude longitude:to.longitude];
+    
+    CLLocationDistance dist = [userloc distanceFromLocation:dest]/1000;
+    
+    //NSLog(@"%f",dist);
+    NSString *distance = [NSString stringWithFormat:@"%f",dist];
+    
+    return [distance floatValue];
+    
+}
 
 - (void)viewWillAppear:(BOOL)animated{
-    
-    [self.locationManager startUpdatingLocation];
     checkMyLocation = YES;
+    [self.locationManager startUpdatingLocation];
+    
     MKCoordinateRegion Bridge = { {self.app.myLatitude, self.app.mylongitued} , {0.0, 0.0} };
     //[mapView setDelegate:self];
     arrRestaurantData = [[NSMutableArray alloc]initWithArray:self.app.arrRegisteredDictinaryRestaurantData];
     [mapView removeAnnotations:mapView.annotations];
     
     for (int count = 0; arrRestaurantData.count>count ; count++) {
-       
+        
         float lati = [[(NSDictionary*)[arrRestaurantData objectAtIndex:count] objectForKey:@"latitude"] floatValue];
         float longgi = [[(NSDictionary*)[arrRestaurantData objectAtIndex:count] objectForKey:@"longitude"] floatValue];
         Bridge.center.latitude = lati;
@@ -215,16 +251,51 @@
         [mapView addAnnotation:ann];
         
     }
-    float lati = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"latitude"] floatValue];
-    float longgi = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"longitude"] floatValue];
     
     
-    [mapView removeOverlay:[[mapView overlays] firstObject]];
-    CLLocationCoordinate2D circleMiddlePoint = CLLocationCoordinate2DMake(lati, longgi);
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:circleMiddlePoint radius:300];
-    [mapView addOverlay: circle];
     
-   
+}
+- (IBAction)ChangeMDistanceSearch:(UISlider *)sender {
+    
+    preValue = sender.value;
+    if ((int)(sender.value) % 2 == 0) {
+        self.app.arrTempSearchedDictinaryRestaurantData = [[NSMutableArray alloc]init];
+        [mapView removeOverlay:[[mapView overlays] firstObject]];
+        //temp
+        //float lati = [[self.app.arrRegisteredDictinaryRestaurantData.firstObject objectForKey:@"latitude"] floatValue];
+        //float longi = [[self.app.arrRegisteredDictinaryRestaurantData.firstObject objectForKey:@"longitude"] floatValue];
+        //CLLocationCoordinate2D circleMiddlePoint = CLLocationCoordinate2DMake(lati, longi);
+        //filter with distance
+        
+        //MyCoordinate.coordinate = CLLocationCoordinate2DMake(lati, longi);
+        //temp
+        // draw circle at my location
+        MKCircle *circle = [MKCircle circleWithCenterCoordinate:MyCoordinate.coordinate radius:sender.value*100];
+        [mapView addOverlay: circle];
+        
+        NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+        [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
+        [formatter setMaximumFractionDigits:2];
+        NSString *formattedNumber = [formatter stringFromNumber:@(sender.value/10)];
+        self.lblMDistance.text = [NSString stringWithFormat:@"%@ Km", formattedNumber];
+
+        for (NSDictionary *RestaurantData in self.app.arrRegisteredDictinaryRestaurantData) {
+            float resLati = [[RestaurantData objectForKey:@"latitude"] floatValue];
+            float resLong = [[RestaurantData objectForKey:@"longitude"] floatValue];
+            float distance = [self kilometersfromPlace:MyCoordinate.coordinate andToPlace:CLLocationCoordinate2DMake(resLati, resLong)];
+            if (distance<[formattedNumber floatValue]) {
+                [self.app.arrTempSearchedDictinaryRestaurantData addObject:RestaurantData];
+            }
+        }
+    }
+    
+}
+- (IBAction)ExchangeMMapList:(UIButton *)sender {
+    
+    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+    NearMeListViewController *nearMeListViewController = [storyboard instantiateViewControllerWithIdentifier:@"NearMeListViewController"];
+    [self.navigationController pushViewController:nearMeListViewController animated:YES];
+    
 }
 - (IBAction)goSlide:(UIButton *)sender {
     [self.view addGestureRecognizer:self.revealViewController.tapGestureRecognizer];

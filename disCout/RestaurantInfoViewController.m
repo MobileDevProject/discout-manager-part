@@ -29,13 +29,13 @@
     NSString *ResSnippetText;
     NSString *ResDisplayPhone;
     NSString *ResReviewCount;
-    NSString *ResMobileURL;
+    NSURL *ResMobileURL;
     NSDictionary *dicRestaurantData;
     NSDictionary *tempDic;
     
 }
 
-@property (weak, nonatomic) IBOutlet UIImageView *imgRestaurnat;
+@property (weak, nonatomic) IBOutlet UIImageView *imgMRestaurnat;
 @property (strong, nonatomic) IBOutlet UIImageView *registerMarkImage;
 @property (strong, nonatomic) IBOutlet UIButton *registerButton;
 @property (nonatomic, strong) webViewController* webViewVC;
@@ -44,6 +44,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblResAddress;
 @property (strong, nonatomic) IBOutlet UILabel *lblResCategories;
 @property (strong, nonatomic) IBOutlet UILabel *lblResReviewNumber;
+@property (strong, nonatomic) IBOutlet UILabel *lblPhoneNumber;
 
 @end
 
@@ -56,6 +57,7 @@
     
 }
 - (void)viewWillAppear:(BOOL)animated{
+    [self.navigationController setNavigationBarHidden:YES];
     AppDelegate *app = [UIApplication sharedApplication].delegate;
     self.webViewVC = [[webViewController alloc] initWithNibName:@"webViewController" bundle:nil];
     dicRestaurantData = app.dicRestaurantData;
@@ -71,17 +73,29 @@
     ResReviewCount = [dicRestaurantData objectForKey: @"review_count"];
     ResSnnipetImageURL = [dicRestaurantData objectForKey: @"image_url"];
     ResRatingImageURL = [dicRestaurantData objectForKey: @"rating_img_url"];
+    if ([[dicRestaurantData objectForKey:@"mobile_url"] isEqualToString:@""]) {
+        
+    }else{
+        ResMobileURL = [[NSURL alloc]initWithString:(NSString*)[dicRestaurantData objectForKey:@"mobile_url"]];
+    }
     
-    [self.imgRestaurnat sd_setImageWithURL:[NSURL URLWithString:ResSnnipetImageURL]
+    [self.imgMRestaurnat sd_setImageWithURL:[NSURL URLWithString:ResSnnipetImageURL]
                           placeholderImage:[UIImage imageNamed:@"Splash.png"]];
     [self.imgRating sd_setImageWithURL:[NSURL URLWithString:ResRatingImageURL]
                           placeholderImage:[UIImage imageNamed:@"Splash.png"]];
     //check if the restaurant is registered in user database.
     [self.registerMarkImage setImage:[UIImage imageNamed:@"unregisterMark.png"]];
+    [self.registerButton setTitle:@"REGISTER" forState:UIControlStateNormal];
     self.lblResName.text = ResName;
     self.lblResAddress.text = ResAddress;
     self.lblResCategories.text = ResCategories;
-    self.lblResReviewNumber.text =[NSString stringWithFormat:@"%@ reviews", ResReviewCount] ;
+    
+    self.lblPhoneNumber.text = [dicRestaurantData objectForKey:@"display_phone"];
+    if ([ResReviewCount intValue] == 0) {
+        self.lblResReviewNumber.text =[NSString stringWithFormat:@"no review"] ;
+    }else{
+        self.lblResReviewNumber.text =[NSString stringWithFormat:@"%@ reviews", ResReviewCount] ;
+    }
     
     for (int count1 = 0;app.arrRegisteredDictinaryRestaurantData.count>count1;count1++) {
         if ([[[app.arrRegisteredDictinaryRestaurantData objectAtIndex:count1]objectForKey:@"name"] isEqualToString:ResName]) {
@@ -149,11 +163,17 @@
             
         }
     
-    //    self.webViewVC.url = [NSURL URLWithString:[(Annotation*)[view annotation] url]];
-    //    [self.navigationController pushViewController:self.webViewVC animated:YES];
+
 }
 - (IBAction)goSideMenu:(UIButton *)sender {
     [self.navigationController.revealViewController rightRevealToggle:nil];
 }
-
+- (IBAction)goTosite:(UIButton *)sender {
+    if (ResMobileURL) {
+        self.webViewVC = [[webViewController alloc]initWithNibName:@"webViewController" bundle:nil];
+        self.webViewVC.url = ResMobileURL;
+        [self.navigationController pushViewController:self.webViewVC animated:YES];
+    }
+    
+}
 @end

@@ -18,6 +18,7 @@
 @property (nonatomic)int selectedResNumberFromResList;
 //@property (nonatomic,retain)NSDictionary *dicSearchedDictionaryRestaurantData;
 @property (nonatomic,retain)NSMutableArray *arrSearchedDictinaryRestaurantData;
+@property (nonatomic,retain)NSMutableArray *arrTempSearchedDictinaryRestaurantData;
 @property (nonatomic,retain)NSMutableArray *arrRegisteredDictinaryRestaurantData;
 @property (nonatomic,retain)NSMutableArray *arrPayDictinaryData;//dic->user, user->paydate and payamount
 

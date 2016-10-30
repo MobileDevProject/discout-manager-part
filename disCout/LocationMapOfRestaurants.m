@@ -144,10 +144,6 @@
     float longgi = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"longitude"] floatValue];
     MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(CLLocationCoordinate2DMake(lati, longgi), 2500, 2500);
     [self.mapView setRegion:region animated:YES];
-    [mapView removeOverlay:[[mapView overlays] firstObject]];
-    CLLocationCoordinate2D circleMiddlePoint = CLLocationCoordinate2DMake(lati, longgi);
-    MKCircle *circle = [MKCircle circleWithCenterCoordinate:circleMiddlePoint radius:1500];
-    [mapView addOverlay: circle];
 
 }
 
