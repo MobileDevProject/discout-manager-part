@@ -15,7 +15,9 @@
 #import "restaurantListViewcontroller.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 #import "webViewController.h"
-@interface RestaurantInfoViewController ()
+#import "QRCodeReaderViewController.h"
+#import "QRCodeReader.h"
+@interface RestaurantInfoViewController ()<QRCodeReaderDelegate>
 {
     NSString *ResName;
     NSString *ResAddress;
@@ -29,9 +31,12 @@
     NSString *ResSnippetText;
     NSString *ResDisplayPhone;
     NSString *ResReviewCount;
+    NSString *ResID;
+    NSString *numberOfCoupons;
     NSURL *ResMobileURL;
     NSDictionary *dicRestaurantData;
     NSDictionary *tempDic;
+    AppDelegate *app;
     
 }
 
@@ -45,6 +50,11 @@
 @property (strong, nonatomic) IBOutlet UILabel *lblResCategories;
 @property (strong, nonatomic) IBOutlet UILabel *lblResReviewNumber;
 @property (strong, nonatomic) IBOutlet UILabel *lblPhoneNumber;
+@property (weak, nonatomic) IBOutlet UILabel *lblResID;
+@property (weak, nonatomic) IBOutlet UILabel *lblNumberOfCoupons;
+
+//Alet View
+
 
 @end
 
@@ -54,14 +64,14 @@
     [super viewDidLoad];
     
     
-    
 }
 - (void)viewWillAppear:(BOOL)animated{
     [self.navigationController setNavigationBarHidden:YES];
-    AppDelegate *app = [UIApplication sharedApplication].delegate;
+    app = [UIApplication sharedApplication].delegate;
     self.webViewVC = [[webViewController alloc] initWithNibName:@"webViewController" bundle:nil];
-    dicRestaurantData = app.dicRestaurantData;
+    dicRestaurantData = app.dicRestaurantData ;
     
+    ResID = [dicRestaurantData objectForKey:@"resid"];
     ResName = [dicRestaurantData objectForKey: @"name"];
     ResAddress = [dicRestaurantData objectForKey: @"address"];
     ResPostalcode = [dicRestaurantData objectForKey: @"postal_code"];
@@ -73,6 +83,7 @@
     ResReviewCount = [dicRestaurantData objectForKey: @"review_count"];
     ResSnnipetImageURL = [dicRestaurantData objectForKey: @"image_url"];
     ResRatingImageURL = [dicRestaurantData objectForKey: @"rating_img_url"];
+    numberOfCoupons = [dicRestaurantData objectForKey: @"numberOfCoupons"];
     if ([[dicRestaurantData objectForKey:@"mobile_url"] isEqualToString:@""]) {
         
     }else{
@@ -89,12 +100,17 @@
     self.lblResName.text = ResName;
     self.lblResAddress.text = ResAddress;
     self.lblResCategories.text = ResCategories;
-    
+    self.lblResID.text = ResID;
     self.lblPhoneNumber.text = [dicRestaurantData objectForKey:@"display_phone"];
+    if ([numberOfCoupons intValue]==0) {
+        [self.lblNumberOfCoupons setText:[NSString stringWithFormat:@"no coupon is accepted"]];
+    }else{
+        [self.lblNumberOfCoupons setText:[NSString stringWithFormat:@"%@ coupons were accepted", numberOfCoupons]];
+    }
     if ([ResReviewCount intValue] == 0) {
         self.lblResReviewNumber.text =[NSString stringWithFormat:@"no review"] ;
     }else{
-        self.lblResReviewNumber.text =[NSString stringWithFormat:@"%@ reviews", ResReviewCount] ;
+        self.lblResReviewNumber.text =[NSString stringWithFormat:@"%@ reviews", ResReviewCount];
     }
     
     for (int count1 = 0;app.arrRegisteredDictinaryRestaurantData.count>count1;count1++) {
@@ -118,15 +134,73 @@
 
 }
 - (IBAction)registerRemoveButton:(UIButton *)sender {
-    AppDelegate *app = [UIApplication sharedApplication].delegate;
+    
     
         if ([sender.titleLabel.text isEqualToString:@"REGISTER"]) {
-            FIRDatabaseReference* savedResData = [[[[FIRDatabase database] reference]child:@"restaurants"] child:ResName];
-            [savedResData setValue:dicRestaurantData];
-            [app.arrRegisteredDictinaryRestaurantData addObject:dicRestaurantData];
-            [self.navigationController popViewControllerAnimated:YES];
-           }
-        else{
+            
+            
+            UINavigationController *resinfoNavigationC = [[UINavigationController alloc]init];
+            resinfoNavigationC = self.navigationController;
+            
+            
+            
+            
+            UIAlertController * registerRestaurant = [UIAlertController
+                                                   alertControllerWithTitle:@"REGISTER THE RESTAURANT"
+                                                   message:@"Are sure register the restaurant?"
+                                                   preferredStyle:UIAlertControllerStyleAlert];
+            
+            
+            
+            UIAlertAction *typeRestaurantID = [UIAlertAction actionWithTitle:@"Type Restaurant ID" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                
+                UIAlertController * alertController = [UIAlertController alertControllerWithTitle: @"RESTAURANT ID"
+                                                                                          message: @"Input the RESTAURANT ID"
+                                                                                   preferredStyle:UIAlertControllerStyleAlert];
+                [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+                    textField.placeholder = @"Restaurant ID";
+                    textField.textColor = [UIColor blackColor];
+                    textField.clearButtonMode = UITextFieldViewModeWhileEditing;
+                    textField.borderStyle = UITextBorderStyleRoundedRect;
+
+                }];
+                
+                [alertController addAction:[UIAlertAction actionWithTitle:@"Ok" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    NSArray * textfields = alertController.textFields;
+                    UITextField * resIDTextField = textfields[0];
+                    ResID = resIDTextField.text;
+                    [self acceptCoupon:ResID];
+                    //[app.arrRegisteredDictinaryRestaurantData addObject:tempMuarDic];
+                    [registerRestaurant dismissViewControllerAnimated:YES completion:nil];
+                    [resinfoNavigationC popViewControllerAnimated:YES];
+                    
+                }]];
+                [alertController addAction:[UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+                    [registerRestaurant dismissViewControllerAnimated:YES completion:nil];
+                    
+                }]];
+                
+                [self presentViewController:alertController animated:YES completion:nil];
+                
+                
+            }];
+            
+            UIAlertAction *captureQRcode = [UIAlertAction actionWithTitle:@"CaptureQRcode" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [self scanAction];
+                [registerRestaurant dismissViewControllerAnimated:YES completion:nil];
+            }];
+            
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [registerRestaurant dismissViewControllerAnimated:YES completion:nil];
+            }];
+            
+            [registerRestaurant addAction:typeRestaurantID];
+            [registerRestaurant addAction:captureQRcode];
+            [registerRestaurant addAction:cancel];
+            [self presentViewController:registerRestaurant animated:YES completion:nil];
+            
+            
+           }else{
             UIAlertController * loginErrorAlert = [UIAlertController
                                                    alertControllerWithTitle:@"REMOVE THE RESTAURANT"
                                                    message:@"Are sure remove the restaurant?"
@@ -164,6 +238,124 @@
         }
     
 
+}
+
+
+#pragma mark - Scan QR code
+- (void)scanAction
+{
+    if ([QRCodeReader supportsMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]]) {
+        static QRCodeReaderViewController *vc = nil;
+        static dispatch_once_t onceToken;
+        
+        dispatch_once(&onceToken, ^{
+            QRCodeReader *reader = [QRCodeReader readerWithMetadataObjectTypes:@[AVMetadataObjectTypeQRCode]];
+            vc                   = [QRCodeReaderViewController readerWithCancelButtonTitle:@"Cancel" codeReader:reader startScanningAtLoad:YES showSwitchCameraButton:YES showTorchButton:YES];
+            vc.modalPresentationStyle = UIModalPresentationFormSheet;
+        });
+        vc.delegate = self;
+        
+        [vc setCompletionWithBlock:^(NSString *resultAsString) {
+            NSLog(@"Completion with result: %@", resultAsString);
+        }];
+        
+        //[self presentViewController:vc animated:YES completion:NULL];
+        [self.navigationController pushViewController:vc animated:NO];
+    }
+    else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Reader not supported by the current device" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        
+        [alert show];
+    }
+}
+
+#pragma mark - QRCodeReader Delegate Methods
+
+- (void)reader:(QRCodeReaderViewController *)reader didScanResult:(NSString *)result
+{
+    [reader stopScanning];
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    [self acceptCoupon:result];
+    //app.scannedCode = result;
+    
+    //    UIAlertController * loginErrorAlert = [UIAlertController
+    //                                           alertControllerWithTitle:@"REMOVE THE RESTAURANT"
+    //                                           message:@"Are sure remove the restaurant?"
+    //                                           preferredStyle:UIAlertControllerStyleAlert];
+    //    [self presentViewController:loginErrorAlert animated:YES completion:nil];
+    //    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+    //
+    //    }];
+    //    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+    //        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+    //    }];
+    //    [loginErrorAlert addAction:ok];
+    //    [loginErrorAlert addAction:cancel];
+}
+
+- (void)readerDidCancel:(QRCodeReaderViewController *)reader
+{
+    [self.navigationController popViewControllerAnimated:NO];
+}
+
+-(void)acceptCoupon: (NSString*)resID{
+    
+    
+    
+    UIAlertController * loginErrorAlert = [UIAlertController
+                                           alertControllerWithTitle:@"Restourant ID"
+                                           message:[NSString stringWithFormat:@"Are sure use the ID.\n%@", resID ]
+                                           preferredStyle:UIAlertControllerStyleAlert];
+    [self presentViewController:loginErrorAlert animated:YES completion:nil];
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        
+        
+        
+        
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"resid ==[c] %@", resID];
+        NSArray* arrSearchedRes = [[NSArray alloc]initWithArray:[app.arrRegisteredDictinaryRestaurantData filteredArrayUsingPredicate:predicate]];
+        if (arrSearchedRes.count > 0) {
+            
+            UIAlertController * loginErrorAlert = [UIAlertController
+                                                   alertControllerWithTitle:@"Invalid ID"
+                                                   message:@"This ID has been used aleady. Please enter the another ID"
+                                                   preferredStyle:UIAlertControllerStyleAlert];
+            [self presentViewController:loginErrorAlert animated:YES completion:nil];
+            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+                [self viewDidLoad];
+                
+            }];
+            [loginErrorAlert addAction:ok];
+            
+        }else{
+            
+            numberOfCoupons = [NSString stringWithFormat:@"0"];
+            NSMutableDictionary *tempMuarDic = [[NSMutableDictionary alloc]initWithDictionary:dicRestaurantData];
+            [tempMuarDic setValue:resID forKey:@"resid"];
+            [tempMuarDic setValue:@"0" forKey:@"numberOfCoupons"];
+            //register the restaurant
+            //[alertController dismissViewControllerAnimated:YES completion:nil];
+            FIRDatabaseReference* savedResData = [[[[FIRDatabase database] reference]child:@"restaurants"] child:ResName];
+            //[self presentViewController:registerRestaurant animated:YES completion:nil];
+            [savedResData setValue:tempMuarDic];
+            [self.navigationController popViewControllerAnimated:YES];
+            
+        }
+        
+        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+        //[self.navigationController popViewControllerAnimated:YES];
+    }];
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [loginErrorAlert addAction:ok];
+    [loginErrorAlert addAction:cancel];
+    
+}
+-(void)registerRestaurant{
+    
 }
 - (IBAction)goSideMenu:(UIButton *)sender {
     [self.navigationController.revealViewController rightRevealToggle:nil];

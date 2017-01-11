@@ -62,6 +62,7 @@
 //manager mail
 @property (nonatomic, retain)NSString *managerMail;
 @property (nonatomic) BOOL isManager;
+@property (nonatomic) BOOL boolOncePassed;
 
 //location
 @property (nonatomic) float myLatitude;

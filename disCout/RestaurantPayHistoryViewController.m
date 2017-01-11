@@ -64,7 +64,6 @@
     NSDate *datePay = (NSDate*)[[payData objectAtIndex:indexPath.row] objectForKey:@"date"];
     memberShip.text = [NSString stringWithFormat:@"$%@ / Month : %d%%", amount,2*[amount intValue]];
     date.text = [dateFormatter stringFromDate: datePay];
-    NSString* tam= date.text;
     return  cell;
 
 }

@@ -107,7 +107,12 @@
                           placeholderImage:[UIImage imageNamed:@"Splash.png"]];
     
     UILabel *reviewCount = (UILabel *)[cell viewWithTag:106];
-    reviewCount.text = [NSString stringWithFormat:@"%@ reviews",[[app.arrRegisteredDictinaryRestaurantData objectAtIndex:indexPath.row] objectForKey:@"review_count"]];
+    if ([[[app.arrRegisteredDictinaryRestaurantData objectAtIndex:indexPath.row] objectForKey:@"numberOfCoupons"] intValue]==0) {
+        [reviewCount setText:[NSString stringWithFormat:@"no coupon is accepted"]];
+    }else{
+        [reviewCount setText:[NSString stringWithFormat:@"%@ coupons were accepted", [[app.arrRegisteredDictinaryRestaurantData objectAtIndex:indexPath.row] objectForKey:@"numberOfCoupons"]]];
+    }
+    
     
     UILabel *resCategories = (UILabel *)[cell viewWithTag:107];
     resCategories.text = [[app.arrRegisteredDictinaryRestaurantData objectAtIndex:indexPath.row] objectForKey:@"categories"];

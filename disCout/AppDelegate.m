@@ -30,7 +30,7 @@
     [FIRApp configure];
     _dicRestaurantData = [[NSDictionary alloc]init];
     //self.dicSearchedDictionaryRestaurantData = [[NSDictionary alloc] init];
-    
+    self.boolOncePassed = false;
     //init condition
     self.intSearchOption1 = 1;
     self.intSearchOption2 = 1;
@@ -47,7 +47,15 @@
     [self.arrSelectedCuisine setObject:@"1" atIndexedSubscript:self.arrSelectedCuisine.count];
     [application setStatusBarHidden:YES];
     // Add this if you only want to change Selected Image color
-    [[UITabBar appearance] setUnselectedItemTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+    NSLog(@"System Version is %@",[[UIDevice currentDevice] systemVersion]);
+    NSString *ver = [[UIDevice currentDevice] systemVersion];
+    float ver_float = [ver floatValue];
+    if (ver_float >= 10.0) {
+        [[UITabBar appearance] setUnselectedItemTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+    }else{
+        [[UIView appearanceWhenContainedInInstancesOfClasses:[[NSArray alloc] initWithObjects:[UITabBar class],nil]] setTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+        [UITabBar appearance].tintColor = [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0];
+    }
 
     
     [UITabBarItem.appearance setTitleTextAttributes:

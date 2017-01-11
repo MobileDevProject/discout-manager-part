@@ -42,7 +42,6 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 - (IBAction)changePhoto:(UIButton *)sender {
-   
     //UIActionSheet *objViewActionSheet = [[UIActionSheet alloc] initWithTitle:@"Choose Image" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Use Gallery",@"Use Camera", nil];
     
     UIAlertController* alert = [UIAlertController

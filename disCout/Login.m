@@ -26,7 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnSignIn;
 @property (weak, nonatomic) IBOutlet UIButton *btnSignUp;
 @property (weak, nonatomic) IBOutlet UIButton *btnSignWithFacebook;
-
+@property (weak, nonatomic) IBOutlet UIButton *btnHideKeyboard;
 @end
 
 @implementation Login
@@ -266,7 +266,14 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     // do whatever you have to do
-    
+    if (textField.tag == 101) {
+        
+        [(UITextField*)[self.view viewWithTag:102] becomeFirstResponder];
+        return YES;
+    }else if(textField.tag == 102){
+        [self goFromLogin:nil];
+        
+    }
     [textField resignFirstResponder];
     return YES;
 }
@@ -384,18 +391,19 @@
 
 - (void)loadResDataAndGo{
     app = [UIApplication sharedApplication].delegate;
-    app.arrRegisteredDictinaryRestaurantData = [[NSMutableArray alloc]init];
-    app.arrPayDictinaryData = [[NSMutableArray alloc]init];
+    
     [self.view setUserInteractionEnabled:NO];
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
             //get all restaurant info
             FIRDatabaseReference* ref = [[[FIRDatabase database] reference] child:@"restaurants"];
-            [ref observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            [ref observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                app.arrRegisteredDictinaryRestaurantData = [[NSMutableArray alloc]init];
+                
                 if (snapshot.exists) {
                     NSDictionary*dic = snapshot.value;
-                    
+        
                     NSArray *keys;
                     if (![dic isKindOfClass:[NSNull class]]) {
                         keys = dic.allKeys;
@@ -406,18 +414,33 @@
                         [app.arrRegisteredDictinaryRestaurantData addObject:restaurantData];
                     }
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [app addTabBar];
+                        if (!app.boolOncePassed) {
+                            app.boolOncePassed = true;
+                            [app addTabBar];
+                        }
+                        
                     });
                 }else{
-                    UIAlertController * loginErrorAlert = [UIAlertController
-                                                           alertControllerWithTitle:@"Cannot find restaurant info"
-                                                           message:@"you cannot access restaurant info. please trya again."
-                                                           preferredStyle:UIAlertControllerStyleAlert];
-                    [self presentViewController:loginErrorAlert animated:YES completion:nil];
-                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
-                    }];
-                    [loginErrorAlert addAction:ok];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (!app.boolOncePassed) {
+                            [app addTabBar];
+                        }
+                    });
+//                    UIAlertController * loginErrorAlert = [UIAlertController
+//                                                           alertControllerWithTitle:@"Cannot find restaurant info"
+//                                                           message:@"you cannot access restaurant info. please try again."
+//                                                           preferredStyle:UIAlertControllerStyleAlert];
+//                    [self presentViewController:loginErrorAlert animated:YES completion:nil];
+//                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+//                        
+//                        dispatch_async(dispatch_get_main_queue(), ^{
+//                            
+//                            [app addTabBar];
+//                        });
+//                        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+//                        
+//                    }];
+//                    [loginErrorAlert addAction:ok];
                 }
 
             }];
@@ -426,7 +449,8 @@
             //get users' pay data
             FIRDatabaseReference* refPay = [[[FIRDatabase database] reference] child:@"users"];
             //[self loadResData];
-            [refPay observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            [refPay observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                app.arrPayDictinaryData = [[NSMutableArray alloc]init];
                 NSDictionary*dic = snapshot.value;
                 NSArray *keys;
                 if (![dic isKindOfClass:[NSNull class]]) {
@@ -510,6 +534,16 @@
     
     
 }
-
+//keyboard show/hidden
+- (IBAction)dismissKeyboard:(UIButton *)sender {
+    [self.view endEditing:YES];
+}
+- (void)keyboardWasShown:(NSNotification *)aNotification {
+    [self.btnHideKeyboard setHidden:NO];
+}
+- (void)keyboardBeHidden:(NSNotification *)aNotification {
+    
+    [self.btnHideKeyboard setHidden:YES];
+}
 
 @end
