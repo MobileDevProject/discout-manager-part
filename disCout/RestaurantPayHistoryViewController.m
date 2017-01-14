@@ -16,6 +16,7 @@
 {
     AppDelegate *app;
     int childCount;
+    NSMutableDictionary *mudicPayData;
 }
 @property (strong, nonatomic) IBOutlet UICollectionView *payHistoryTableView;
 @property (strong, nonatomic) IBOutlet UIImageView *imgPhoto;
@@ -26,13 +27,13 @@
 @end
 
 @implementation RestaurantPayHistoryViewController
-
+#pragma mark - set environment
 - (void) viewDidLoad{
     app = [UIApplication sharedApplication].delegate;
     childCount = 1;
-    self.JobID.text = [Request currentUserUid];
+    //self.JobID.text = [Request currentUserUid];
     self.UserName.text = app.user.name;
-    self.Membership.text = app.user.membership;
+    //self.Membership.text = app.user.membership;
     [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"MyCard_Active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setImage:[[UIImage imageNamed:@"MyCard_InActive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setTitle:@"MY CARD"];
@@ -40,14 +41,22 @@
     
     
 }
+- (void) viewWillAppear:(BOOL)animated{
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    [self.view addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
+    [self.imgPhoto sd_setImageWithURL:app.user.photoURL placeholderImage:[UIImage imageNamed:@"person0.jpg"]];
+}
 
+#pragma mark - restaurant collectionView delegate
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     return app.arrPayDictinaryData.count;
 }
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     return [[[app.arrPayDictinaryData objectAtIndex:section] objectForKey:@"pay info"] count] ;
 }
-
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return CGSizeMake(collectionView.frame.size.width, 50);
+}
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath{
     static NSString *identifier = @"payCell";
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
@@ -90,21 +99,11 @@
         reusableview = headerView;
     }
     
-//    if (kind == UICollectionElementKindSectionFooter) {
-//        UICollectionReusableView *footerview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:@"FooterView" forIndexPath:indexPath];
-//        
-//        reusableview = footerview;
-//    }
-    
     return reusableview;
 }
+#pragma mark - go side
 - (IBAction)goSideMenu:(UIButton *)sender {
     [self.navigationController.revealViewController rightRevealToggle:nil];
-}
-- (void) viewWillAppear:(BOOL)animated{
-    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-    [self.view addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
-    [self.imgPhoto sd_setImageWithURL:app.user.photoURL placeholderImage:[UIImage imageNamed:@"person0.jpg"]];
 }
 
 

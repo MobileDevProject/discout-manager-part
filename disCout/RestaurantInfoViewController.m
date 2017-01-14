@@ -277,21 +277,6 @@
     
     [self.navigationController popViewControllerAnimated:YES];
     [self acceptCoupon:result];
-    //app.scannedCode = result;
-    
-    //    UIAlertController * loginErrorAlert = [UIAlertController
-    //                                           alertControllerWithTitle:@"REMOVE THE RESTAURANT"
-    //                                           message:@"Are sure remove the restaurant?"
-    //                                           preferredStyle:UIAlertControllerStyleAlert];
-    //    [self presentViewController:loginErrorAlert animated:YES completion:nil];
-    //    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-    //
-    //    }];
-    //    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-    //        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
-    //    }];
-    //    [loginErrorAlert addAction:ok];
-    //    [loginErrorAlert addAction:cancel];
 }
 
 - (void)readerDidCancel:(QRCodeReaderViewController *)reader

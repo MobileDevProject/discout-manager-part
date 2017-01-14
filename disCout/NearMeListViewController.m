@@ -33,6 +33,7 @@
 
 @implementation NearMeListViewController
 
+#pragma mark - set environment
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -63,19 +64,23 @@
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
 }
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+
+#pragma mark - go side
 - (IBAction)goSideMenu:(UIButton *)sender {
     [self.navigationController.revealViewController rightRevealToggle:nil];
 }
-
+#pragma mark - exchange map
 - (IBAction)ExchangeMap:(UIButton *)sender {
     // pop back to previous controller
     [self.navigationController popViewControllerAnimated:YES];
     
 }
+
+- (IBAction)GoBack:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
+#pragma mark - sort
 - (IBAction)Sort:(UIButton *)sender {
     
     
@@ -94,10 +99,8 @@
     
 }
 
-- (IBAction)GoBack:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
+#pragma mark - restaurant collectionView delegate
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section{
     
     return app.arrTempSearchedDictinaryRestaurantData.count;

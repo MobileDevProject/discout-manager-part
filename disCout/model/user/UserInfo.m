@@ -28,7 +28,7 @@
         self.cardDate = dict[@"card date"] ? dict[@"card date"] : nil;
         self.cardNumber = dict[@"card number"] ? dict[@"card number"] : nil;
         self.payData = dict[@"pay info"] ? dict[@"pay info"] : nil;
-        self.isCancelled = dict[@"isCancelled"];
+        self.isCancelled = [(NSString*)dict[@"isCancelled"] boolValue];
     }
     
     return self;

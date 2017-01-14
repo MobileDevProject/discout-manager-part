@@ -255,20 +255,15 @@
     
     
 }
+
+//change distance
 - (IBAction)ChangeMDistanceSearch:(UISlider *)sender {
     
     preValue = sender.value;
     if ((int)(sender.value) % 2 == 0) {
         self.app.arrTempSearchedDictinaryRestaurantData = [[NSMutableArray alloc]init];
         [mapView removeOverlay:[[mapView overlays] firstObject]];
-        //temp
-        //float lati = [[self.app.arrRegisteredDictinaryRestaurantData.firstObject objectForKey:@"latitude"] floatValue];
-        //float longi = [[self.app.arrRegisteredDictinaryRestaurantData.firstObject objectForKey:@"longitude"] floatValue];
-        //CLLocationCoordinate2D circleMiddlePoint = CLLocationCoordinate2DMake(lati, longi);
-        //filter with distance
         
-        //MyCoordinate.coordinate = CLLocationCoordinate2DMake(lati, longi);
-        //temp
         // draw circle at my location
         MKCircle *circle = [MKCircle circleWithCenterCoordinate:MyCoordinate.coordinate radius:sender.value*100];
         [mapView addOverlay: circle];
@@ -290,6 +285,7 @@
     }
     
 }
+
 - (IBAction)ExchangeMMapList:(UIButton *)sender {
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

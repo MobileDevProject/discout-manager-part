@@ -34,15 +34,17 @@
     __weak IBOutlet UICollectionView *tableCuisine;
     __weak IBOutlet UIImageView *imgCheckSelectAll;
     IBOutlet UILabel *lblMSelectedCuisineType;
+    
+    __weak IBOutlet UIButton *btnDismissKeyboard;
     int count;
 }
 
-
+#pragma mark - set environment
 - (void)viewDidLoad {
     [super viewDidLoad];
     //start offset number init
-    app.offsetNumber = 1;
     app = [UIApplication sharedApplication].delegate;
+    app.offsetNumber = 0;
     arrCuisine = [[NSMutableArray alloc]init];
     arrCuisine = app.arrCuisine;
     lblMSelectedCuisineType.text = @"All";
@@ -74,12 +76,12 @@
     
     
     //if checkedSearchKeyType ==1 -> check the location button, 2 : by Name, 3:All
-    app.intSearchOption2 = 1;
+    app.intSearchOption2 = 3;
     //selected the btnCheckAlphabetical button
     [btnCheckAlphabetical setBackgroundImage:[UIImage imageNamed:@"btn_Search_InActive.png"] forState:UIControlStateNormal];
     [btnCheckAlphabetical setTintColor:[UIColor colorWithWhite:1 alpha:0]];
     [btnCheckAlphabetical setBackgroundImage:[UIImage imageNamed:@"btn_Search_Active.png"] forState:UIControlStateSelected];
-    [btnCheckAlphabetical setSelected:YES];
+    [btnCheckAlphabetical setSelected:NO];
     
     
     //selected the btnCheckrate button
@@ -92,12 +94,17 @@
     [btnCheckMatch setBackgroundImage:[UIImage imageNamed:@"btn_Search_InActive.png"] forState:UIControlStateNormal];
     [btnCheckMatch setTintColor:[UIColor colorWithWhite:1 alpha:0]];
     [btnCheckMatch setBackgroundImage:[UIImage imageNamed:@"btn_Search_Active.png"] forState:UIControlStateSelected];
-    [btnCheckMatch setSelected:NO];
+    [btnCheckMatch setSelected:YES];
+    
     
     [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"Search_Active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setImage:[[UIImage imageNamed:@"Search_InActive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     
-    }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardBeHidden:) name:UIKeyboardWillHideNotification object:nil];
+    [btnDismissKeyboard setHidden:YES];
+    
+}
 
 -(void)viewWillAppear:(BOOL)animated{
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
@@ -155,16 +162,33 @@
     app.intSearchOption2 = 3;
 }
 
+- (IBAction)hideKyeboard:(UIButton *)sender {
+    [self.view endEditing:YES];
+}
 
+- (void)keyboardWasShown:(NSNotification *)aNotification {
+    [btnDismissKeyboard setHidden:NO];
+}
+- (void)keyboardBeHidden:(NSNotification *)aNotification {
+    [btnDismissKeyboard setHidden:YES];
+}
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    [self search:nil];
+    [textField resignFirstResponder];
+    return YES;
+}
 
+#pragma mark - search
 - (IBAction)search:(id)sender {
     app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]init];
+    if ([txtFieldSearchKey.text isEqualToString:@""] && app.intSearchOption1 != 3) {
+        return;
+    }
+//set search option
     app.offsetNumber = 1;
     count = 1;
     app.IsMatch = true;
-    
-    //app.arrRestaurantData = [[NSMutableArray alloc]init];
-    //app.dicSearchedDictionaryRestaurantData = [[NSDictionary alloc]init];
     
     app.offsetNumber = 1;
     if (app.intSearchOption1 == 1) {
@@ -184,21 +208,13 @@
         app.term = @"restaurant";
         app.location = @"Houston, TX";
     }
-    
-    
-    
+
     NSString *startoffset;
-    //int num = 1;
-    
-    
     YPAPISample *APISample = [[YPAPISample alloc] init];
-    //all restaurant data will be stored in nsdictionary with array components.
+//all restaurant data will be stored in nsdictionary with array components.
     app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]init];
-    //app.arrSearchedRestaurants = [[NSArray alloc]init];
      startoffset = [NSString stringWithFormat:@"%d", ((app.offsetNumber-1) * 20) +1];
     [self.view setUserInteractionEnabled:NO];
-    
-    
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     
@@ -206,8 +222,6 @@
         
     [APISample queryTopBusinessInfoForTerm:app.term location:app.location offset:startoffset completionHandler:^(NSDictionary *searchResponseJSON, NSError *error) {
         
-        //            [commonUtils showActivityIndicatorColored:self.view];
-        //muarRestaurantImage = [[NSMutableArray alloc]init];
         if (error) {
             NSLog(@"An error happened during the request: %@", error);
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -217,9 +231,6 @@
         } else if (searchResponseJSON) {
             
             NSMutableArray* businessArray = searchResponseJSON[@"businesses"];
-            //[app.arrSearchedRestaurants arrayByAddingObjectsFromArray:businessArray];
-            //app.arrSearchedRestaurants = app.businessArray;
-            
             for (NSDictionary *itemRestaurant in businessArray) {
                 NSString *resName = (NSString*)[itemRestaurant objectForKey:@"name"]? [itemRestaurant objectForKey:@"name"] : @" ";
                 NSString* ResSnippetText = (NSString*)[itemRestaurant objectForKey:@"snippet_text"]? [itemRestaurant objectForKey:@"snippet_text"] : @" ";
@@ -227,7 +238,7 @@
                     ResSnippetText = @"";
                 }
                 
-                // get location start
+            // get location start
                 NSDictionary *dic1 = [itemRestaurant objectForKey:@"location"];
                 
                 NSArray *addressArray = (NSArray*)[dic1 objectForKey:@"display_address"];
@@ -243,13 +254,12 @@
                 if (resAddress==nil) {
                     resAddress = @" ";
                 }
-               //NSString* postalcode = (NSString*)[dic1 objectForKey:@"postal_code"];
                 
                 NSDictionary *dic2 = [dic1 objectForKey:@"coordinate"];
                 NSString* lati = [dic2 objectForKey:@"latitude"] ? [dic2 objectForKey:@"latitude"] : @" ";
                 NSString* longgi = [dic2 objectForKey:@"longitude"] ? [dic2 objectForKey:@"longitude"] : @" ";
                 NSString* postalcode = (NSString*)[dic1 objectForKey:@"postal_code"] ? [dic1 objectForKey:@"postal_code"] : @" ";
-                //get categories
+            //get categories
                 NSArray *resdicres = (NSArray*)[itemRestaurant objectForKey:@"categories"];
                 NSString *resCategories;
                 for (int count1 = 0; resdicres.count > count1; count1++) {
@@ -274,70 +284,77 @@
                 NSString *resMobileURL = [itemRestaurant objectForKey:@"mobile_url"] ? [itemRestaurant objectForKey:@"mobile_url"] : @" ";
                 
                 NSDictionary *dicRestaurantData = [NSDictionary dictionaryWithObjectsAndKeys:resName, @"name", resCategories, @"categories", resDisplayPhoneNumber, @"display_phone", resAddress, @"address", resRating, @"rating", resReviewCount, @"review_count", postalcode, @"postal_code", lati,@"latitude",longgi, @"longitude", resRatingImageURL, @"rating_img_url", ResSnippetText, @"snippet_text", resImageURL, @"image_url", resMobileURL, @"mobile_url", nil];
-                //filter with cuisine type
+                
+            //filter with cuisine type
                 if ([imgCheckSelectAll.image isEqual:[UIImage imageNamed:@"btn_Search_Active.png"]]) {
                     [app.arrSearchedDictinaryRestaurantData addObject:dicRestaurantData];
                 }else{
-                for (int count1 = 0;app.arrCuisine.count>count1;count1++) {
-                    if ([[app.arrSelectedCuisine objectAtIndex:count1] isEqualToString:@"1"] && [resCategories containsString:[app.arrCuisine objectAtIndex:count1]]) {
-                        [app.arrSearchedDictinaryRestaurantData addObject:dicRestaurantData];
-                        break;
-                    }
-
-                }
-                }
-
-                
-                
-                
                     
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                    for (int count1 = 0;app.arrCuisine.count>count1;count1++) {
                         
+                        if ([[app.arrSelectedCuisine objectAtIndex:count1] isEqualToString:@"1"] && [resCategories containsString:[app.arrCuisine objectAtIndex:count1]]) {
+                            
+                            [app.arrSearchedDictinaryRestaurantData addObject:dicRestaurantData];
+                            break;
+                            
+                        }
+
+                    }
+                }
+                
+                
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+
+                    
+                    if (count == businessArray.count) {
+                        NSSortDescriptor * descriptor;
+                        if (app.intSearchOption2==1) {
+                            
+                            descriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
+                            app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+                        }else if(app.intSearchOption2==2){
+                            
+                            descriptor = [[NSSortDescriptor alloc] initWithKey:@"rating" ascending:NO];
+                            app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+                        }
+                    
                         
-                if (count == businessArray.count) {
-                    NSSortDescriptor * descriptor;
-                    if (app.intSearchOption2==1) {
-                        descriptor = [[NSSortDescriptor alloc] initWithKey:@"name" ascending:YES];
-                        app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
-                    }else if(app.intSearchOption2==2)
-                    {
-                        descriptor = [[NSSortDescriptor alloc] initWithKey:@"rating" ascending:NO];
-                        app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+                        [MBProgressHUD hideHUDForView:self.view animated:YES];/////
+                        [self.view setUserInteractionEnabled:YES];
+                        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+                        LocationMapOfRestaurants *LocationMapViewController = [storyboard instantiateViewControllerWithIdentifier:@"LocationMapOfRestaurants"];
+                        [self.navigationController pushViewController:LocationMapViewController animated:YES];
                     }
                     
-                    //app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
-                    
-                    [MBProgressHUD hideHUDForView:self.view animated:YES];/////
-                    [self.view setUserInteractionEnabled:YES];
-                    UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-                    LocationMapOfRestaurants *LocationMapViewController = [storyboard instantiateViewControllerWithIdentifier:@"LocationMapOfRestaurants"];
-                    [self.navigationController pushViewController:LocationMapViewController animated:YES];
-                    
-                }
-                count++;
-                    });
+                    count++;
+                });
                
-            }            
+            }
         }else {
+            
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSLog(@"No business was found");
+                UIAlertController * loginErrorAlert = [UIAlertController
+                                                       alertControllerWithTitle:@"No Result"
+                                                       message:@"there is no search result"
+                                                       preferredStyle:UIAlertControllerStyleAlert];
+                [self presentViewController:loginErrorAlert animated:YES completion:nil];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+                    return;
+                }];
+                [loginErrorAlert addAction:ok];
                 [MBProgressHUD hideHUDForView:self.view animated:YES];/////
                 [self.view setUserInteractionEnabled:YES];
             });
         }
     }];
- });
+        
+    });
     
 }
 
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    
-    // do whatever you have to do
-    
-    [textField resignFirstResponder];
-    return YES;
-}
+#pragma mark - select cuisine
 
 - (IBAction)OpenFilterWithCuisine:(UIButton *)sender {
     [viewSelectCuisine setHidden:NO];
@@ -348,7 +365,6 @@
     [tableCuisine reloadData];
 }
 
-//close Cuisine filter window
 - (IBAction)selectFilterWindow:(UIButton *)sender {
     //add
     [viewSelectCuisine setHidden:YES];
@@ -386,12 +402,7 @@
     [self.view sendSubviewToBack:viewSelectCuisine];
 }
 
-
-//select all cuisine type
 - (IBAction)CuisineSelectAll:(UIButton *)sender {
-    
-    //init
-    //select all cuisine Image
     
     [imgCheckSelectAll setImage:[UIImage imageNamed:@"btn_Search_Active.png"]];
     arrSelectedCuisine = [[NSMutableArray alloc]init];
@@ -405,8 +416,7 @@
     [tableCuisine reloadData];
 }
 - (IBAction)clearAllCuisine:(UIButton *)sender {
-    //init
-    //Clear all cuisine Image
+
     app.isSelectedAllCuisine = false;
     [imgCheckSelectAll setImage:[UIImage imageNamed:@"unCheckCuisine.png"]];
     arrSelectedCuisine = [[NSMutableArray alloc]init];
@@ -421,16 +431,16 @@
 
 }
 
-
+#pragma mark - filter cuisine collectionView delegate
 -(NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
     return 1;
 }
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath{
     static NSString *identifier = @"CuisineCell1";
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
-        UILabel *CusisineType = (UILabel *)[cell viewWithTag:102];
-        CusisineType.text = [arrCuisine objectAtIndex:indexPath.row];
-        UIImageView *checkImage = (UIImageView*)[cell viewWithTag:101];
+    UILabel *CusisineType = (UILabel *)[cell viewWithTag:102];
+    CusisineType.text = [arrCuisine objectAtIndex:indexPath.row];
+    UIImageView *checkImage = (UIImageView*)[cell viewWithTag:101];
     if ([(NSString*)[arrSelectedCuisine objectAtIndex:indexPath.row] isEqualToString:@"0"]) {
         [checkImage setImage:[UIImage imageNamed:@"unCheckCuisine.png"]];
     }
@@ -449,7 +459,7 @@
             
         }
     }
-
+    
     return cell;
     //UIImageView *resImage =
     
@@ -478,10 +488,10 @@
     return arrCuisine.count;
 }
 
+#pragma mark - go slide
 - (IBAction)goSlide:(UIButton *)sender {
     [self.navigationController.revealViewController rightRevealToggle:nil];
 }
-
 @end
 
 

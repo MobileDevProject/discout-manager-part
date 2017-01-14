@@ -9,7 +9,6 @@
 #import "actvatedRestaurantListViewController.h"
 #import "SearchViewController.h"
 #import "MapViewController.h"
-#import "AllPayHistoryViewController.h"
 
 #import "AppDelegate.h"
 
@@ -52,11 +51,15 @@
     float ver_float = [ver floatValue];
     if (ver_float >= 10.0) {
         [[UITabBar appearance] setUnselectedItemTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+        
     }else{
         [[UIView appearanceWhenContainedInInstancesOfClasses:[[NSArray alloc] initWithObjects:[UITabBar class],nil]] setTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
         [UITabBar appearance].tintColor = [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0];
     }
-
+    
+    if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_6_1) {
+        self.window.tintAdjustmentMode = UIViewTintAdjustmentModeNormal;
+    }
     
     [UITabBarItem.appearance setTitleTextAttributes:
      @{NSForegroundColorAttributeName : [UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]}

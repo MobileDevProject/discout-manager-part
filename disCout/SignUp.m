@@ -8,7 +8,6 @@
 
 @import Firebase;
 #import "Request.h"
-#import <AVFoundation/AVFoundation.h>
 #import "MBProgressHUD.h"
 #import "AppDelegate.h"
 #import "OfferViewController.h"
@@ -21,9 +20,10 @@
 @property (weak, nonatomic) IBOutlet UITextField *textUserName;
 @property (weak, nonatomic) IBOutlet UITextField *textEmail;
 @property (weak, nonatomic) IBOutlet UITextField *textPass;
-//card info
 
+//card info
 @property (strong, nonatomic) IBOutlet UIButton *btnPhoto;
+@property (weak, nonatomic) IBOutlet UIButton *btnDismissKeyboard;
 
 @end
 
@@ -32,17 +32,52 @@
     NSArray *businessArray;
     NSNotification *noti;
 }
+#pragma mark - set environment
 - (void)viewDidLoad {
     [super viewDidLoad];
+    //filter button
     self.btnRegisterCard.layer.cornerRadius = 3;
-    //[self.btnPhoto setBackgroundImage:[UIImage imageNamed:@"person0.jpg"] forState:UIControlStateNormal];
     [self.btnPhoto setShowsTouchWhenHighlighted:NO];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWasShown:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardBeHidden:) name:UIKeyboardWillHideNotification object:nil];
+    [self.btnDismissKeyboard setHidden:YES];
 }
-- (IBAction)goSignIn:(UIButton *)sender {
-    [self.navigationController popViewControllerAnimated:YES];
+- (void) viewWillAppear:(BOOL)animated{
+    
+    UIImage *image1 = self.btnPhoto.currentBackgroundImage;
+    if (!image1) {
+        [self.btnPhoto setBackgroundImage:[UIImage imageNamed:@"person0.jpg"] forState:UIControlStateNormal];
+    }
 }
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    
+    if (textField.tag == 101) {
+        
+        [(UITextField*)[self.view viewWithTag:102] becomeFirstResponder];
+        return YES;
+    }else if(textField.tag == 102) {
+        
+        [(UITextField*)[self.view viewWithTag:103] becomeFirstResponder];
+        return YES;
+    }
+    else if(textField.tag == 103){
+        [textField resignFirstResponder];
+        [self RegisterCard:nil];
+        return YES;
+    }
+    [textField resignFirstResponder];
+    return YES;
+}
+- (void)keyboardWasShown:(NSNotification *)aNotification {
+    [self.btnDismissKeyboard setHidden:NO];
+}
+- (void)keyboardBeHidden:(NSNotification *)aNotification {
+    
+    [self.btnDismissKeyboard setHidden:YES];
+}
+#pragma mark - change photo
 - (IBAction)changePhoto:(UIButton *)sender {
-    //UIActionSheet *objViewActionSheet = [[UIActionSheet alloc] initWithTitle:@"Choose Image" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Use Gallery",@"Use Camera", nil];
     
     UIAlertController* alert = [UIAlertController
                                 alertControllerWithTitle:nil      //  Must be "nil", otherwise a blank title area will appear above our two buttons
@@ -94,8 +129,8 @@
     [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - SignUp
 - (IBAction)RegisterCard:(UIButton *)sender {
-    [self playSound:@"m3"];
     [self.view endEditing:YES];
     NSString *strUserEmail = self.textEmail.text;
     NSString *strUserPass = self.textPass.text;
@@ -152,24 +187,21 @@
                      [MBProgressHUD hideHUDForView:self.view animated:YES];/////
                      //if ([CreditCard_Validator checkCreditCardNumber:self.textCardNumber.text]) {
                      if (error != nil) {
-                         // [START_EXCLUDE]
+
                          UIAlertController * loginErrorAlert = [UIAlertController
                                                                 alertControllerWithTitle:@"Inavalid email address"
                                                                 message:@"Wrong username or email. Please checke for errors and try again."
                                                                 preferredStyle:UIAlertControllerStyleAlert];
                          [self presentViewController:loginErrorAlert animated:YES completion:nil];
+                         
                          UIAlertAction *ok = [UIAlertAction actionWithTitle:@"cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                             //NSLog(@"reset password cancelled.");
                              [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
                          }];
                          [loginErrorAlert addAction:ok];
-                         // [END_EXCLUDE]
+
                      }
                      else{
-                         
-                         
-                             
-                         
+
                          UIAlertController * loginErrorAlert = [UIAlertController
                                                                 alertControllerWithTitle:@"Success!"
                                                                 message:@"Complete your Singup."
@@ -178,6 +210,7 @@
                          //go sign in
                          [self presentViewController:loginErrorAlert animated:YES completion:nil];
                          UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                             //load user data to Backend
                              [Request saveUserEmail:self.textEmail.text];
                              [Request saveUserName:self.textUserName.text];
                              AppDelegate *app = [UIApplication sharedApplication].delegate;
@@ -191,11 +224,11 @@
                                  
                              }
                              [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
-                             //go register card
+                             
+                             //go login and main view
                              UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
                              Login *signUp = [storyboard instantiateViewControllerWithIdentifier:@"Login"];
                              [self.navigationController pushViewController:signUp animated:YES];
-                             //[app addTabBar];
                          }];
                          [loginErrorAlert addAction:ok];
                          
@@ -208,10 +241,8 @@
         });//Add MBProgressBar (dispatch)
     }
 }
-- (IBAction)BackToSignIn:(id)sender {
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
+#pragma mark - go Offer
 - (IBAction)SeeOffer:(UIButton *)sender {
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -219,50 +250,13 @@
     [self.navigationController pushViewController:offerViewController animated:YES];
 }
 
-
--(void)playSound:fileName{
-    
-    
-    NSString *soundPath = [[NSBundle mainBundle] pathForResource:fileName ofType:@"mp3"];
-    SystemSoundID soundID;
-    AudioServicesCreateSystemSoundID((__bridge CFURLRef)[NSURL fileURLWithPath:soundPath], &soundID);
-    AudioServicesPlaySystemSound(soundID);
-    
+#pragma mark - go login
+- (IBAction)goSignIn:(UIButton *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    
-    // do whatever you have to do
-    
-    [textField resignFirstResponder];
-    return YES;
+- (IBAction)BackToSignIn:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-     Get the new view controller using [segue destinationViewController].
-     Pass the selected object to the new view controller.
-}
-*/
-
-//definition of my functions
-#pragma mark - saveUserData
-- (void) viewWillAppear:(BOOL)animated{
-    
-    UIImage *image1 = self.btnPhoto.currentBackgroundImage;
-    if (!image1) {
-        [self.btnPhoto setBackgroundImage:[UIImage imageNamed:@"person0.jpg"] forState:UIControlStateNormal];
-    }
-}
-
 
 @end

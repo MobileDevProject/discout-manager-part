@@ -10,17 +10,23 @@
 
 @implementation customTabbar
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
-}
-*/
+
+//- (void)drawRect:(CGRect)rect {
+//    // Drawing code
+//    [self setFrame:rect];
+//    [self setUnselectedItemTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+//    [self setTintAdjustmentMode:UIViewTintAdjustmentModeNormal];
+//    [self setTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
+//    //[self drawRect:rect];
+//    [self setBackgroundColor:[UIColor blackColor]];
+//    
+//}
+
 -(CGSize)sizeThatFits:(CGSize)size{
     CGSize size1 = size;
     size1.height = 70;
     return size1;
+    
 }
 
 @end

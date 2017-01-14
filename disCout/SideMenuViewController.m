@@ -10,6 +10,7 @@
 #import "SWRevealViewController.h"
 #import "SideMenuViewController.h"
 #import "Request.h"
+#import "AppDelegate.h"
 @interface SideMenuViewController ()
 
 @end
@@ -29,45 +30,24 @@
     // Dispose of any resources that can be recreated.
 }
 
-//#pragma mark - Table view data source
-//
-//- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-//{
-//    // Return the number of sections.
-//    return 1;
-//}
-//
-//- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-//{
-//    // Return the number of rows in the section.
-//    return [menuItems count];
-//}
-//
-//- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    NSString *CellIdentifier = [menuItems objectAtIndex:indexPath.row];
-//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-//    return cell;
-//}
-//
-
-        
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
 
     if (indexPath.row==0) {
+        //go main view
         [self.revealViewController performSegueWithIdentifier:@"sw_front" sender:nil];
         [self.revealViewController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
-    }else if(indexPath.row==3){
+    }else if(indexPath.row==2){
+        
+        //log out
         NSError *error;
+        AppDelegate *app = [UIApplication sharedApplication].delegate;
+        app.boolOncePassed = false;
         [[FIRAuth auth] signOut:&error];
-        NSLog(@"error: %@", error.localizedDescription);
         UINavigationController *homeViewController = [[UIStoryboard storyboardWithName:@"Main" bundle:nil] instantiateViewControllerWithIdentifier:@"SignViewController"];
         [self presentViewController:homeViewController animated:YES completion:nil];
     }
 
-    
-    
 }
 
 
