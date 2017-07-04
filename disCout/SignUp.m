@@ -1,10 +1,3 @@
-//
-//  SignUp.m
-//  disCout
-//
-//  Created by Theodor Hedin on 7/20/16.
-//  Copyright © 2016 THedin. All rights reserved.
-//
 
 @import Firebase;
 #import "Request.h"
@@ -185,7 +178,6 @@
                  //after progress
                  dispatch_async(dispatch_get_main_queue(), ^{///////
                      [MBProgressHUD hideHUDForView:self.view animated:YES];/////
-                     //if ([CreditCard_Validator checkCreditCardNumber:self.textCardNumber.text]) {
                      if (error != nil) {
 
                          UIAlertController * loginErrorAlert = [UIAlertController

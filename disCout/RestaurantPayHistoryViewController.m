@@ -1,10 +1,4 @@
-//
-//  RestaurantPayHistoryViewController.m
-//  disCout
-//
-//  Created by Theodor Hedin on 9/25/16.
-//  Copyright © 2016 THedin. All rights reserved.
-//
+
 #import "Request.h"
 #import "AppDelegate.h"
 #import "SWRevealViewController.h"
@@ -17,6 +11,7 @@
     AppDelegate *app;
     int childCount;
     NSMutableDictionary *mudicPayData;
+    
 }
 @property (strong, nonatomic) IBOutlet UICollectionView *payHistoryTableView;
 @property (strong, nonatomic) IBOutlet UIImageView *imgPhoto;
@@ -31,12 +26,10 @@
 - (void) viewDidLoad{
     app = [UIApplication sharedApplication].delegate;
     childCount = 1;
-    //self.JobID.text = [Request currentUserUid];
     self.UserName.text = app.user.name;
-    //self.Membership.text = app.user.membership;
     [self.tabBarItem setSelectedImage:[[UIImage imageNamed:@"MyCard_Active.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
     [self.tabBarItem setImage:[[UIImage imageNamed:@"MyCard_InActive.png"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
-    [self.tabBarItem setTitle:@"MY CARD"];
+    [self.tabBarItem setTitle:@"SAVED"];
     
     
     
@@ -62,16 +55,13 @@
     UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identifier forIndexPath:indexPath];
     UILabel *date = (UILabel *)[cell viewWithTag:101];
     UILabel *Amount = (UILabel *)[cell viewWithTag:102];
-    UILabel *memberShip = (UILabel *)[cell viewWithTag:103];
     NSDictionary *payDic = [app.arrPayDictinaryData objectAtIndex:indexPath.section];
     NSArray *payData = [payDic objectForKey:@"pay info"];
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
-     ;
-    NSString* amount =(NSString*)[[payData objectAtIndex:indexPath.row]objectForKey:@"amount"];
-    Amount.text =  [NSString stringWithFormat:@"$%@",amount];
+    [dateFormatter setDateFormat:@"MM/dd/yyyy HH:mm:ss"];
+    NSString* amount =(NSString*)[[payData objectAtIndex:indexPath.row]objectForKey:@"resName"];
+    Amount.text =  [NSString stringWithFormat:@"%@",amount];
     NSDate *datePay = (NSDate*)[[payData objectAtIndex:indexPath.row] objectForKey:@"date"];
-    memberShip.text = [NSString stringWithFormat:@"$%@ / Month : %d%%", amount,2*[amount intValue]];
     date.text = [dateFormatter stringFromDate: datePay];
     return  cell;
 
@@ -106,6 +96,18 @@
     [self.navigationController.revealViewController rightRevealToggle:nil];
 }
 
-
+-(NSDate*)date_from_string: (NSString*)string{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM_dd_yyyy_HH_mm_ss"];
+    NSDate *dateReturn = (__bridge NSDate *)([dateFormatter dateFromString:string]?[string isEqualToString:@"defaultTime"]:nil);
+    return dateReturn;
+}
+-(NSString*)string_from_date: (NSDate*)date{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"EST"]];
+    [dateFormatter setDateFormat:@"MM_dd_yyyy_HH_mm_ss"];
+    NSString *strReturn = [dateFormatter stringFromDate:date];
+    return strReturn;
+}
 
 @end

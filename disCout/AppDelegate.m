@@ -1,16 +1,10 @@
-//
-//  AppDelegate.m
-//  disCout
-//
-//  Created by Theodor Hedin on 7/20/16.
-//  Copyright © 2016 THedin. All rights reserved.
-//
+
 #import "SWRevealViewController.h"
 #import "actvatedRestaurantListViewController.h"
 #import "SearchViewController.h"
 #import "MapViewController.h"
-
 #import "AppDelegate.h"
+#import "NHNetworkClock.h"
 
 @interface AppDelegate ()
 
@@ -28,23 +22,20 @@
     
     [FIRApp configure];
     _dicRestaurantData = [[NSDictionary alloc]init];
-    //self.dicSearchedDictionaryRestaurantData = [[NSDictionary alloc] init];
+    [[NHNetworkClock sharedNetworkClock] synchronize];
     self.boolOncePassed = false;
+    
     //init condition
     self.intSearchOption1 = 1;
     self.intSearchOption2 = 1;
+    
     //1. init Cuisign type
-    self.arrCuisine = [[NSArray alloc]initWithObjects:@"Restaurants", @"Mexican",@"Fast Food", @"Sandwiches", @"Food", @"Burgers", @"Pizza", @"American (Traditional)", @"Chinese", @"Chicken Wings", @"Nightlife", @"Seafood", @"Bars", @"Breakfast & Brunch", @"Italian", @"American (New)", @"Tex-Mex", @"Delis", @"Barbeque", @"Vietnamese", @"Cajun/Creole", @"Food Trucks", @"Salad", @"Cafes", @"Latin American", nil];
+//    self.arrCuisine = [[NSMutableArray alloc]initWithObjects:@"All", @"Mexican",@"Fast Food", @"Deli", @"Burgers", @"Pizza", @"American (Traditional)", @"Chinese", @"Chicken Wings", @"Seafood", @"Bars", @"Breakfast & Brunch", @"Italian", @"American (New)", @"Tex-Mex", @"Barbeque", @"Vietnamese", @"Cajun/Creole", @"Food Trucks", @"Latin American", @"Mediterranean", @"European", @"Thai", @"Indian", @"Asian", @"Sushi", @"Vegetarian", @"Steakhouse", nil];
     self.user = [[UserInfo alloc]init];
-    //init selected cuisine type
-    self.arrSelectedCuisine = [[NSMutableArray alloc]init];
-    for (int index = 0; index < self.arrCuisine.count; index++) {
-        
-        [self.arrSelectedCuisine addObject:@"1"];
-        
-    }
-    [self.arrSelectedCuisine setObject:@"1" atIndexedSubscript:self.arrSelectedCuisine.count];
+    
+    
     [application setStatusBarHidden:YES];
+    
     // Add this if you only want to change Selected Image color
     NSLog(@"System Version is %@",[[UIDevice currentDevice] systemVersion]);
     NSString *ver = [[UIDevice currentDevice] systemVersion];

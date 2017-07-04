@@ -239,6 +239,11 @@
     [_toggleTorchButton setTranslatesAutoresizingMaskIntoConstraints:false];
     [_toggleTorchButton addTarget:self action:@selector(toggleTorchAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_toggleTorchButton];
+      
+//      CGAffineTransform tran = CGAffineTransformMakeTranslation((self.view.frame.size.width/2 - _toggleTorchButton.frame.size.width - _toggleTorchButton.frame.origin.x), 0);
+//      [_toggleTorchButton setTransform:tran];
+      
+      
   }
 
   self.cancelButton                                       = [[UIButton alloc] init];

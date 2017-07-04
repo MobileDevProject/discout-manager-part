@@ -1,10 +1,4 @@
-//
-//  Request.m
-//  disCout
-//
-//  Created by Theodor Hedin on 9/25/16.
-//  Copyright © 2016 THedin. All rights reserved.
-//
+
 #import "AppDelegate.h"
 #import "Request.h"
 FIRDatabaseReference *ref;
@@ -43,9 +37,7 @@ FIRDatabaseReference *ref;
     FIRDatabaseReference* ref = [[[[[FIRDatabase database] reference] child:@"manager"] child:app.user.userId]child:@"name"] ;
     [ref setValue:(NSString*)name];
 }
-//+ (void)getUserName{
-//    [[[[[self dataref] child:@"users"] child:[self currentUserUid] ] child:@"name"] ];
-//}
+
 + (NSError*)saveManagerCardInfo:number cvid:cvid date:date{
     AppDelegate *app = [UIApplication sharedApplication].delegate;
     [[[[[self dataref] child:@"manager"] child:[self currentUserUid] ]child:@"cardcvid"] setValue:cvid withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
@@ -79,10 +71,10 @@ FIRDatabaseReference *ref;
 + (void)upDateManagerAccount:mangerID email:email name:name{
     AppDelegate *app = [UIApplication sharedApplication].delegate;
     FIRDatabaseReference* ref = [[Request dataref]child:@"manager"];
-            NSString* cardCVID = app.user.cardCVID; // [dic objectForKey:@"cardcvid"];
-            NSString* cardNumber = app.user.cardNumber; // [dic objectForKey:@"cardnumber"];
-            NSString* cardDate = app.user.cardDate; // [dic objectForKey:@"carddate"];
-            NSString* photoURL = [app.user.photoURL absoluteString]; //[dic objectForKey:@"photourl"];
+            NSString* cardCVID = app.user.cardCVID;
+            NSString* cardNumber = app.user.cardNumber;
+            NSString* cardDate = app.user.cardDate;
+            NSString* photoURL = [app.user.photoURL absoluteString];
             photoURL = photoURL ? photoURL: @" ";
                 NSString *key = [[ref child:@"manager"] child:mangerID].key;
                 NSDictionary *post = @{@"email": email,
@@ -180,7 +172,82 @@ FIRDatabaseReference *ref;
     }];
 }
 
++(void)registerUser:name email:email image:image{
+    
+    FIRUser *user = [FIRAuth auth].currentUser;
+    FIRUserProfileChangeRequest *changeRequest = [user profileChangeRequest];
+    NSString *userId = user.uid;
+    FIRStorage *storage = [FIRStorage storage];
+    FIRStorageReference *storageRef = [storage reference];
+    AppDelegate *app = [UIApplication sharedApplication].delegate;
+    dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        FIRStorageReference *photoImagesRef = [storageRef child:[NSString stringWithFormat:@"users photo/%@/photo.jpg", [Request currentUserUid]] ];
+        NSData *imageData = UIImagePNGRepresentation(image);
+        
+        //image compress until size < 1 MB
+        int count = 0;
+        while ([imageData length] > 1000000) {
+            imageData = UIImageJPEGRepresentation(image, powf(0.9, count));
+            count++;
+            NSLog(@"just shrunk it once.");
+        }
+        
+        // Upload the file to the path "images/userID.PNG"f
+        
+        [photoImagesRef putData:imageData metadata:nil completion:^(FIRStorageMetadata *metadata, NSError *error) {
+            if (error != nil) {
+                // Uh-oh, an error occurred!
+            } else {
+                // Metadata contains file metadata such as size, content-type, and download URL.
+                changeRequest.displayName = name;
+                changeRequest.photoURL = metadata.downloadURL;
+                [changeRequest commitChangesWithCompletion:^(NSError *_Nullable error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (error) {
+                            // An error happened.
+                            NSLog(@"%@", error.description);
+                        } else {
+                            // Profile updated.
+                            
+                            NSDictionary *userData = @{@"name":name,
+                                                       @"email":email,
+                                                       @"photourl":[metadata.downloadURL absoluteString],
+                                                       @"userid":userId,
+                                                       @"numberofcomments":@"0"
+                                                       };
+                            [[[[[FIRDatabase database] reference] child:@"users"] child:userId]setValue:userData];
+                            
+                        }
+                        
+                    });
+                }];
+                
+            }
+        }];
+        
+    });
+    
+    
+}
 
++ (void)addCuisineType: (NSArray*)cuisineArray{
+    AppDelegate *app = [UIApplication sharedApplication].delegate;
+    NSMutableSet *newCuisine = [NSMutableSet set];
+    for (NSString *Cuisine in app.arrCuisine) {
+        [newCuisine addObject:Cuisine];
+    }
+    
+    for (NSString *cuisine in cuisineArray) {
+        if (![newCuisine containsObject:cuisine]) {
+            [app.arrCuisine addObject:cuisine];
+        }
+    }
+    
+    FIRDatabaseReference *allRestaurants = [[self dataref] child:@"cuisine"];
+    //NSDictionary *registerData = [NSDictionary dictionaryWithObjectsAndKeys:app.arrCuisine,@"cuisine", nil];
+    [allRestaurants setValue:app.arrCuisine];
+    
+}
 
 @end
 

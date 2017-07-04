@@ -37,7 +37,7 @@
         //go main view
         [self.revealViewController performSegueWithIdentifier:@"sw_front" sender:nil];
         [self.revealViewController setFrontViewPosition:FrontViewPositionRightMost animated:YES];
-    }else if(indexPath.row==2){
+    }else if(indexPath.row==1){
         
         //log out
         NSError *error;

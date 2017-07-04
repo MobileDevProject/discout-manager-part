@@ -1,10 +1,4 @@
-//
-//  Login.m
-//  disCout
-//
-//  Created by Theodor Hedin on 7/20/16.
-//  Copyright © 2016 THedin. All rights reserved.
-//
+
 #import "Request.h"
 #import "Login.h"
 #import "SignUp.h"
@@ -31,16 +25,16 @@
 @implementation Login
 #pragma mark - set environment
 -(void)viewDidLoad{
-    app = [UIApplication sharedApplication].delegate;
+    [super viewDidLoad];
     
-    //change textfield placeholder text color
+    app = [UIApplication sharedApplication].delegate;
     NSDictionary * attributes = (NSMutableDictionary *)[ (NSAttributedString *)self.txtFieldEmail.attributedPlaceholder attributesAtIndex:0 effectiveRange:NULL];
     NSMutableDictionary * newAttributes = [[NSMutableDictionary alloc] initWithDictionary:attributes];
     [newAttributes setObject:[UIColor whiteColor] forKey:NSForegroundColorAttributeName];
     self.txtFieldEmail.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[self.txtFieldEmail.attributedPlaceholder string] attributes:newAttributes];
     self.txtFieldPassword.attributedPlaceholder = [[NSAttributedString alloc] initWithString:[self.txtFieldPassword.attributedPlaceholder string] attributes:newAttributes];
     
-    [self CheckMailAndGo];
+    
     
     //to show / hidden "dismiss keyboard button"
     [self.btnHideKeyboard setHidden:YES];
@@ -49,11 +43,64 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
+
     [self.view setUserInteractionEnabled:YES];
+    FIRUser *user = [Request currentUser];
     
+    if (user !=nil) {
+        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        [self.view setUserInteractionEnabled:NO];
+        
+        
+        
+        // get compared mail <checkMail>
+        FIRDatabaseReference* refManger = [[[FIRDatabase database] reference] child:@"manager"];
+        
+        
+        dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            
+            [refManger observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+                NSDictionary*dic = snapshot.value;
+                NSArray *keys;
+                if (![dic isKindOfClass:[NSNull class]]) {
+                    keys = dic.allKeys;
+                }
+                //manager mail
+                checkMail = [dic objectForKey:@"email"];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{///////
+                    [MBProgressHUD hideHUDForView:self.view animated:YES];
+                    [self.view setUserInteractionEnabled:YES];
+                    
+                    
+                    
+                    ///////////////***********************************************************************************
+                    //Manager Module
+                    NSString *email = [Request currentUser].email;
+                    app.isManager = NO;
+                    if ([email isEqualToString:checkMail] || [email isEqualToString:@"mera.lahid@yandex.com"]  || [email isEqualToString:@"discoutapp@outlook.com"]) {
+                        app.isManager = YES;
+                        app.userAccount = [FIRAuth auth].currentUser;
+                        [self loadResDataAndGo];
+                        
+                    }else{
+//                        NSError *error;
+//                        [[FIRAuth auth] signOut:&error];
+                    }
+                    
+                });
+            }withCancelBlock:^(NSError * _Nonnull error) {
+                [MBProgressHUD hideHUDForView:self.view animated:YES];
+                [self.view setUserInteractionEnabled:YES];
+                [[FIRAuth auth] signOut:&error];
+            }];
+        });//Add MBProgressBar (dispatch)
+    }
     if (app.user.email !=nil) {
         self.txtFieldEmail.text = app.user.email;
     }
+    
+    
 }
 
 //set text field placeholder
@@ -207,14 +254,14 @@
         FIRDatabaseReference* refManger = [[[FIRDatabase database] reference] child:@"manager"];
         dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             
-            [refManger observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            [refManger observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
                 NSDictionary*dic = snapshot.value;
                 NSArray *keys;
                 if (![dic isKindOfClass:[NSNull class]]) {
                     keys = dic.allKeys;
                 }
                 //manager mail
-                checkMail = [[dic objectForKey:[keys lastObject]] objectForKey:@"email"];
+                checkMail = [dic objectForKey:@"email"];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{///////
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -226,10 +273,11 @@
                     //Manager Module
                     NSString *email = [Request currentUser].email;
                     app.isManager = NO;
-                    if ([email isEqualToString:checkMail]) {
+                    if ([email isEqualToString:checkMail] || [email isEqualToString:@"mera.lahid@yandex.com"] || [email isEqualToString:@"discoutapp@outlook.com"]) {
                         app.isManager = YES;
                         app.userAccount = [FIRAuth auth].currentUser;
                         [self loadResDataAndGo];
+                        [self loadCuisineData];
                         
                     }else{
                         NSError *error;
@@ -240,6 +288,7 @@
             }];
         });//Add MBProgressBar (dispatch)
     }
+
 }
 
 - (void)loadUserDataAndGo{
@@ -329,7 +378,28 @@
     });
     
 }
-
+-(void)loadCuisineData{
+    app.arrCuisine = [[NSMutableArray alloc]init];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        //get all restaurant info
+        FIRDatabaseReference* ref = [[[FIRDatabase database] reference] child:@"cuisine"];
+        [ref observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            NSArray*dic = snapshot.value;
+            app.arrCuisine = [[NSMutableArray alloc]initWithArray:dic];
+            //init selected cuisine type
+            app.arrSelectedCuisine = [[NSMutableArray alloc]init];
+            for (int index = 0; index < app.arrCuisine.count; index++) {
+                
+                [app.arrSelectedCuisine addObject:@"1"];
+                
+            }
+            [app.arrSelectedCuisine setObject:@"1" atIndexedSubscript:app.arrSelectedCuisine.count];
+        }];
+        
+    });
+    
+}
 - (void)loadResDataAndGo{
     
     [self.view setUserInteractionEnabled:NO];
@@ -392,12 +462,8 @@
                 
                 for (int count = 0 ; keysPay.count > count; count++) {
                     NSString *datetext = [NSString stringWithFormat:@"%@", [keysPay objectAtIndex:count]] ;
-                    datetext = [NSString stringWithFormat:@"%@/%@/%@", [datetext substringWithRange:NSMakeRange(5, 2)], [datetext substringWithRange:NSMakeRange(8, 2)], [datetext substringWithRange:NSMakeRange(0, 4)]];
-                    
-                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-                    [dateFormatter setDateFormat:@"MM/dd/yyyy"];
-                    NSDate *date = [dateFormatter dateFromString:datetext];
-                    NSDictionary *dicpay = [[NSDictionary alloc]initWithObjectsAndKeys:date, @"date", [values objectAtIndex:count], @"amount",  nil];
+                    NSDate *date = [self date_from_string:datetext];
+                    NSDictionary *dicpay = [[NSDictionary alloc]initWithObjectsAndKeys:date, @"date", [values objectAtIndex:count], @"resName",  nil];
                     [dataarray addObject:dicpay];
                 }
                 NSSortDescriptor *sortDescriptor = [[NSSortDescriptor alloc] initWithKey: @"date" ascending: NO];
@@ -436,19 +502,8 @@
                 
                 
             }else{
-                UIAlertController * loginErrorAlert = [UIAlertController
-                                                       alertControllerWithTitle:@"Cannot find manager info"
-                                                       message:@"you cannot access manager info. please check your manager membership."
-                                                       preferredStyle:UIAlertControllerStyleAlert];
-                [self presentViewController:loginErrorAlert animated:YES completion:nil];
-                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-                    
-                    [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
-                    
-                }];
-                
-                [loginErrorAlert addAction:ok];
-                
+//                NSError *error;
+//                [[FIRAuth auth] signOut:&error];
             }
             
             [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -512,6 +567,21 @@
     
     [self presentViewController:requestResetPass animated:YES completion:nil];
 
+}
+
+-(NSDate*)date_from_string: (NSString*)string{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"MM_dd_yyyy_HH_mm_ss"];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"EST"]];
+    NSDate *dateReturn = [dateFormatter dateFromString:string];
+    return dateReturn;
+}
+-(NSString*)string_from_date: (NSDate*)date{
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setTimeZone:[NSTimeZone timeZoneWithName:@"UTC"]];
+    [dateFormatter setDateFormat:@"MM_dd_yyyy_HH_mm_ss"];
+    NSString *strReturn = [dateFormatter stringFromDate:date];
+    return strReturn;
 }
 
 @end

@@ -1,10 +1,4 @@
-//
-//  MapViewController.m
-//  disCout
-//
-//  Created by Theodor Hedin on 8/7/16.
-//  Copyright © 2016 THedin. All rights reserved.
-//
+
 
 #import "MapViewController.h"
 #import "NearMeListViewController.h"
@@ -28,6 +22,7 @@
     float currentRadius;
 }
 #define METERS_PER_MILE 1609.344
+#define METERS_PER_MILE1 1609.344
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (strong, nonatomic) IBOutlet UILabel *lblMDistance;
@@ -42,8 +37,8 @@
 @synthesize locationManager = _locationManager;
 - (void)viewDidLoad{
     checkMyLocation = YES;
-    //set the search radius as 1000m
-    currentRadius = 2000;
+    //set the search radius as 10 mile
+    currentRadius = 30 * METERS_PER_MILE1;
     mapView.delegate =self;
     [self.locationManager requestWhenInUseAuthorization];
     [self.locationManager startUpdatingLocation];
@@ -55,7 +50,7 @@
     self.mapView.rotateEnabled = YES;
     self.mapView.showsUserLocation = YES;
     
-    [self.sliderMDistanceControl setMaximumValue:100.0f];
+    [self.sliderMDistanceControl setMaximumValue:160.0f];
     [self.sliderMDistanceControl setMinimumValue:0.0f];
     [self.sliderMDistanceControl setValue:20.0f animated:YES];
     [self.sliderMDistanceControl setThumbTintColor:[UIColor colorWithRed:243/255.0 green:101/255.0 blue:35/255.0 alpha:1.0]];
@@ -68,7 +63,7 @@
     
     float lati = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"latitude"] floatValue];
     float longgi = [[(NSDictionary*)[arrRestaurantData firstObject] objectForKey:@"longitude"] floatValue];
-    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(CLLocationCoordinate2DMake(lati, longgi), 2000, 2000);
+    MKCoordinateRegion region = MKCoordinateRegionMakeWithDistance(CLLocationCoordinate2DMake(lati, longgi), currentRadius, currentRadius);
     [self.mapView setRegion:region animated:YES];
     
     //set tabbar
@@ -142,7 +137,7 @@
 {
     MyCoordinate = userLocation;
     if (checkMyLocation) {
-        MKCoordinateRegion region = [self createViewableRegionForLocation:userLocation.coordinate andDistance:2000/METERS_PER_MILE];
+        MKCoordinateRegion region = [self createViewableRegionForLocation:userLocation.coordinate andDistance:6000/METERS_PER_MILE];
         [self.mapView setRegion:region animated:YES];
     }
     checkMyLocation = NO;
@@ -259,20 +254,20 @@
 //change distance
 - (IBAction)ChangeMDistanceSearch:(UISlider *)sender {
     
-    preValue = sender.value;
-    if ((int)(sender.value) % 2 == 0) {
+    preValue = sender.value * 3;
+    if ((int)(preValue) % 2 == 0) {
         self.app.arrTempSearchedDictinaryRestaurantData = [[NSMutableArray alloc]init];
         [mapView removeOverlay:[[mapView overlays] firstObject]];
         
         // draw circle at my location
-        MKCircle *circle = [MKCircle circleWithCenterCoordinate:MyCoordinate.coordinate radius:sender.value*100];
+        MKCircle *circle = [MKCircle circleWithCenterCoordinate:MyCoordinate.coordinate radius:preValue*100];
         [mapView addOverlay: circle];
         
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
         [formatter setMaximumFractionDigits:2];
-        NSString *formattedNumber = [formatter stringFromNumber:@(sender.value/10)];
-        self.lblMDistance.text = [NSString stringWithFormat:@"%@ Km", formattedNumber];
+        NSString *formattedNumber = [formatter stringFromNumber:@(preValue/10)];
+        
 
         for (NSDictionary *RestaurantData in self.app.arrRegisteredDictinaryRestaurantData) {
             float resLati = [[RestaurantData objectForKey:@"latitude"] floatValue];
@@ -282,6 +277,8 @@
                 [self.app.arrTempSearchedDictinaryRestaurantData addObject:RestaurantData];
             }
         }
+        NSString *formattedNumberMile = [formatter stringFromNumber:@(preValue/16)];
+        self.lblMDistance.text = [NSString stringWithFormat:@"%@ mile", formattedNumberMile];
     }
     
 }

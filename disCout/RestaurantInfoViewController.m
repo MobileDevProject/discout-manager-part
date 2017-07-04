@@ -1,10 +1,4 @@
-//
-//  RestaurantInfoViewController.m
-//  disCout
-//
-//  Created by Theodor Hedin on 8/16/16.
-//  Copyright © 2016 THedin. All rights reserved.
-//
+
 #import "Request.h"
 #import "AppDelegate.h"
 #import "SWRevealViewController.h"
@@ -53,9 +47,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *lblResID;
 @property (weak, nonatomic) IBOutlet UILabel *lblNumberOfCoupons;
 
-//Alet View
-
-
 @end
 
 @implementation RestaurantInfoViewController
@@ -94,6 +85,7 @@
                           placeholderImage:[UIImage imageNamed:@"Splash.png"]];
     [self.imgRating sd_setImageWithURL:[NSURL URLWithString:ResRatingImageURL]
                           placeholderImage:[UIImage imageNamed:@"Splash.png"]];
+    
     //check if the restaurant is registered in user database.
     [self.registerMarkImage setImage:[UIImage imageNamed:@"unregisterMark.png"]];
     [self.registerButton setTitle:@"REGISTER" forState:UIControlStateNormal];
@@ -170,7 +162,7 @@
                     UITextField * resIDTextField = textfields[0];
                     ResID = resIDTextField.text;
                     [self acceptCoupon:ResID];
-                    //[app.arrRegisteredDictinaryRestaurantData addObject:tempMuarDic];
+                    
                     [registerRestaurant dismissViewControllerAnimated:YES completion:nil];
                     [resinfoNavigationC popViewControllerAnimated:YES];
                     
@@ -218,19 +210,24 @@
                 if ([previousController isKindOfClass:[actvatedRestaurantListViewController class]] || [previousController isKindOfClass:[MapViewController class]]) {
                 [app.arrRegisteredDictinaryRestaurantData removeObjectAtIndex:app.selectedResNumberFromResList];
                 }else if([previousController isKindOfClass:[restaurantListViewcontroller class]] || [previousController isKindOfClass:[LocationMapOfRestaurants class]]){
+                    
                     //remove the registered restaurant to be matched name.
                     for (int count1 = 0; app.arrRegisteredDictinaryRestaurantData.count>count1; count1++) {
                         if ([[app.arrRegisteredDictinaryRestaurantData objectAtIndex:count1] objectForKey:@"name"]==ResName) {
                             [app.arrRegisteredDictinaryRestaurantData removeObjectAtIndex:count1];
+                            
                         }
                     }
                 }
                 [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
                 [self.navigationController popViewControllerAnimated:YES];
+                
             }];
             UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
                 [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+            
             }];
+               
             [loginErrorAlert addAction:ok];
             [loginErrorAlert addAction:cancel];
             
@@ -259,7 +256,6 @@
             NSLog(@"Completion with result: %@", resultAsString);
         }];
         
-        //[self presentViewController:vc animated:YES completion:NULL];
         [self.navigationController pushViewController:vc animated:NO];
     }
     else {
@@ -320,17 +316,38 @@
             NSMutableDictionary *tempMuarDic = [[NSMutableDictionary alloc]initWithDictionary:dicRestaurantData];
             [tempMuarDic setValue:resID forKey:@"resid"];
             [tempMuarDic setValue:@"0" forKey:@"numberOfCoupons"];
+            NSString *tempString = [tempMuarDic objectForKey:@"categories"];
+            NSArray *strArray = [tempString componentsSeparatedByString:@","];
+            [Request addCuisineType:strArray];
             //register the restaurant
-            //[alertController dismissViewControllerAnimated:YES completion:nil];
             FIRDatabaseReference* savedResData = [[[[FIRDatabase database] reference]child:@"restaurants"] child:ResName];
-            //[self presentViewController:registerRestaurant animated:YES completion:nil];
-            [savedResData setValue:tempMuarDic];
+
+            
+            [savedResData setValue:tempMuarDic withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+                if (!error) {
+                    [app.arrRegisteredDictinaryRestaurantData addObject:tempMuarDic];
+                }else{
+                    UIAlertController * loginErrorAlert = [UIAlertController
+                                                           alertControllerWithTitle:@"Regisration Failed"
+                                                           message:error.localizedDescription
+                                                           preferredStyle:UIAlertControllerStyleAlert];
+                    [self presentViewController:loginErrorAlert animated:YES completion:nil];
+                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+                        
+                    }];
+                    [loginErrorAlert addAction:ok];
+                    
+                }
+                
+            }];
+            
             [self.navigationController popViewControllerAnimated:YES];
             
         }
         
         [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
-        //[self.navigationController popViewControllerAnimated:YES];
+
     }];
     UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];

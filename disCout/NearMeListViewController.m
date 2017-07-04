@@ -1,10 +1,4 @@
-//
-//  NearMeListViewController.m
-//  disCout
-//
-//  Created by Theodor Hedin on 10/28/16.
-//  Copyright © 2016 THedin. All rights reserved.
-//
+
 #import "Request.h"
 #import "AppDelegate.h"
 #import "YPAPISample.h"
@@ -45,6 +39,7 @@
 - (void)viewWillAppear:(BOOL)animated{
     muarResName = [[NSMutableArray alloc]init];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        
         //[Request retrieveAllRestaurantsID];
         dispatch_async(dispatch_get_main_queue(), ^{
             NSMutableArray *tempArray = [[NSMutableArray alloc]init];
@@ -59,7 +54,9 @@
             [tempArray removeObjectsInArray:muarResName];
             [registeredRestaurants removeObjectsInArray:tempArray];
             [self.tableResList reloadData];
+            
         });
+        
     });
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
     [self.view addGestureRecognizer:self.revealViewController.tapGestureRecognizer];
@@ -92,8 +89,7 @@
         descriptor = [[NSSortDescriptor alloc] initWithKey:@"rating" ascending:NO];
         app.arrTempSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrTempSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
     }
-    
-    //app.arrSearchedDictinaryRestaurantData = [[NSMutableArray alloc]initWithArray:[app.arrSearchedDictinaryRestaurantData sortedArrayUsingDescriptors:@[descriptor]]];
+
     [self.tableResList reloadData];
     
     
@@ -109,9 +105,6 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(nonnull NSIndexPath *)indexPath{
     
     //retrieve registered restaurants
-    
-    //registeredRestaurants = [[NSMutableArray alloc]initWithArray:app.registeredRestaurants];
-    
     
     
     static NSString *identifier = @"resCell";
@@ -159,12 +152,11 @@
     
     
     return cell;
-    //UIImageView *resImage =
     
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(nonnull NSIndexPath *)indexPath{
-    //app = [UIApplication sharedApplication].delegate;
+
     app.selectedResNumberFromResList = (int)indexPath.row;
     app.dicRestaurantData = [[NSDictionary alloc]initWithDictionary:[app.arrTempSearchedDictinaryRestaurantData objectAtIndex:app.selectedResNumberFromResList] copyItems:YES];
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];

@@ -1,11 +1,4 @@
-//
-//  SearchViewController.m
-//  disCout
-//
-//  Created by Theodor Hedin on 8/6/16.
-//  Copyright © 2016 THedin. All rights reserved.
-//
-//#import "restaurantData.h"
+
 #import "SearchViewController.h"
 #import "YPAPISample.h"
 #import "restaurantListViewcontroller.h"
@@ -225,6 +218,18 @@
         if (error) {
             NSLog(@"An error happened during the request: %@", error);
             dispatch_async(dispatch_get_main_queue(), ^{
+                
+                UIAlertController * loginErrorAlert = [UIAlertController
+                                                       alertControllerWithTitle:@"No Result"
+                                                       message:error.localizedDescription
+                                                       preferredStyle:UIAlertControllerStyleAlert];
+                [self presentViewController:loginErrorAlert animated:YES completion:nil];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+                    [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+                    return;
+                }];
+                [loginErrorAlert addAction:ok];
+                
             [MBProgressHUD hideHUDForView:self.view animated:YES];/////
             [self.view setUserInteractionEnabled:YES];
             });
@@ -453,6 +458,10 @@
     [imgCheckSelectAll setImage:[UIImage imageNamed:@"btn_Search_Active.png"]];
     for (int index = 0; index<arrCuisine.count; index++) {
         
+        if (index == arrCuisine.count-1) {
+            NSString *assr1 = [arrCuisine objectAtIndex:index-1];
+            NSString *assr = [arrCuisine objectAtIndex:index];
+        }
         
         if ([(NSString*)[arrSelectedCuisine objectAtIndex:index] isEqualToString:@"0"]) {
             [imgCheckSelectAll setImage:[UIImage imageNamed:@"unCheckCuisine.png"]];
@@ -461,7 +470,6 @@
     }
     
     return cell;
-    //UIImageView *resImage =
     
 }
 
