@@ -82,6 +82,7 @@
                         app.isManager = YES;
                         app.userAccount = [FIRAuth auth].currentUser;
                         [self loadResDataAndGo];
+                        [self loadCuisineData];
                         
                     }else{
 //                        NSError *error;
