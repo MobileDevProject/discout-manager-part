@@ -71,14 +71,12 @@
                 dispatch_async(dispatch_get_main_queue(), ^{///////
                     [MBProgressHUD hideHUDForView:self.view animated:YES];
                     [self.view setUserInteractionEnabled:YES];
-                    
-                    
-                    
+                                        
                     ///////////////***********************************************************************************
                     //Manager Module
                     NSString *email = [Request currentUser].email;
                     app.isManager = NO;
-                    if ([email isEqualToString:checkMail] || [email isEqualToString:@"mera.lahid@yandex.com"]  || [email isEqualToString:@"discoutapp@outlook.com"]) {
+                    if ([email isEqualToString:checkMail] || [email isEqualToString:@"mera.lahid@yandex.com"] || [email isEqualToString:@"discoutapp@outlook.com"]) {
                         app.isManager = YES;
                         app.userAccount = [FIRAuth auth].currentUser;
                         [self loadResDataAndGo];
@@ -103,6 +101,8 @@
     
     
 }
+
+
 
 //set text field placeholder
 - (void) drawPlaceholderInRect:(CGRect)rect{

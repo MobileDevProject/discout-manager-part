@@ -93,6 +93,8 @@
     self.lblResAddress.text = ResAddress;
     self.lblResCategories.text = ResCategories;
     self.lblResID.text = ResID;
+    [self.lblResID setHidden:YES];
+    
     self.lblPhoneNumber.text = [dicRestaurantData objectForKey:@"display_phone"];
     if ([numberOfCoupons intValue]==0) {
         [self.lblNumberOfCoupons setText:[NSString stringWithFormat:@"no coupon is accepted"]];
@@ -104,6 +106,7 @@
     }else{
         self.lblResReviewNumber.text =[NSString stringWithFormat:@"%@ reviews", ResReviewCount];
     }
+    [self.lblNumberOfCoupons setHidden:YES];
     
     for (int count1 = 0;app.arrRegisteredDictinaryRestaurantData.count>count1;count1++) {
         if ([[[app.arrRegisteredDictinaryRestaurantData objectAtIndex:count1]objectForKey:@"name"] isEqualToString:ResName]) {
@@ -130,7 +133,9 @@
     
         if ([sender.titleLabel.text isEqualToString:@"REGISTER"]) {
             
+            [self acceptCoupon:ResID];
             
+            /*
             UINavigationController *resinfoNavigationC = [[UINavigationController alloc]init];
             resinfoNavigationC = self.navigationController;
             
@@ -190,7 +195,7 @@
             [registerRestaurant addAction:captureQRcode];
             [registerRestaurant addAction:cancel];
             [self presentViewController:registerRestaurant animated:YES completion:nil];
-            
+            */
             
            }else{
             UIAlertController * loginErrorAlert = [UIAlertController
@@ -282,15 +287,21 @@
 
 -(void)acceptCoupon: (NSString*)resID{
     
+    resID = [NSString stringWithFormat: @"%@%@%@", ResName, ResLonggitude, ResLatitude];
+    numberOfCoupons = [NSString stringWithFormat:@"0"];
+    NSMutableDictionary *tempMuarDic = [[NSMutableDictionary alloc]initWithDictionary:dicRestaurantData];
+    [tempMuarDic setValue:resID forKey:@"resid"];
+    [tempMuarDic setValue:@"0" forKey:@"numberOfCoupons"];
+    NSString *tempString = [tempMuarDic objectForKey:@"categories"];
+    NSArray *strArray = [tempString componentsSeparatedByString:@","];
     
+//    UIAlertController * loginErrorAlert = [UIAlertController
+//                                           alertControllerWithTitle:@"Restourant ID"
+//                                           message:[NSString stringWithFormat:@"Are sure use the ID.\n%@", resID ]
+//                                           preferredStyle:UIAlertControllerStyleAlert];
+//    [self presentViewController:loginErrorAlert animated:YES completion:nil];
+//    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
     
-    UIAlertController * loginErrorAlert = [UIAlertController
-                                           alertControllerWithTitle:@"Restourant ID"
-                                           message:[NSString stringWithFormat:@"Are sure use the ID.\n%@", resID ]
-                                           preferredStyle:UIAlertControllerStyleAlert];
-    [self presentViewController:loginErrorAlert animated:YES completion:nil];
-    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-        
         
         
         
@@ -300,7 +311,7 @@
             
             UIAlertController * loginErrorAlert = [UIAlertController
                                                    alertControllerWithTitle:@"Invalid ID"
-                                                   message:@"This ID has been used aleady. Please enter the another ID"
+                                                   message:@"This restaurant has been registered aleady."
                                                    preferredStyle:UIAlertControllerStyleAlert];
             [self presentViewController:loginErrorAlert animated:YES completion:nil];
             UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Dismiss" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
@@ -312,16 +323,11 @@
             
         }else{
             
-            numberOfCoupons = [NSString stringWithFormat:@"0"];
-            NSMutableDictionary *tempMuarDic = [[NSMutableDictionary alloc]initWithDictionary:dicRestaurantData];
-            [tempMuarDic setValue:resID forKey:@"resid"];
-            [tempMuarDic setValue:@"0" forKey:@"numberOfCoupons"];
-            NSString *tempString = [tempMuarDic objectForKey:@"categories"];
-            NSArray *strArray = [tempString componentsSeparatedByString:@","];
+            
             [Request addCuisineType:strArray];
             //register the restaurant
             FIRDatabaseReference* savedResData = [[[[FIRDatabase database] reference]child:@"restaurants"] child:ResName];
-
+            
             
             [savedResData setValue:tempMuarDic withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
                 if (!error) {
@@ -346,14 +352,14 @@
             
         }
         
-        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+//        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
 
-    }];
-    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
-        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
-    }];
-    [loginErrorAlert addAction:ok];
-    [loginErrorAlert addAction:cancel];
+//    }];
+//    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"CANCEL" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
+//        [loginErrorAlert dismissViewControllerAnimated:YES completion:nil];
+//    }];
+//    [loginErrorAlert addAction:ok];
+//    [loginErrorAlert addAction:cancel];
     
 }
 -(void)registerRestaurant{

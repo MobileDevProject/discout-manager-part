@@ -179,7 +179,7 @@ FIRDatabaseReference *ref;
     NSString *userId = user.uid;
     FIRStorage *storage = [FIRStorage storage];
     FIRStorageReference *storageRef = [storage reference];
-    AppDelegate *app = [UIApplication sharedApplication].delegate;
+    //AppDelegate *app = [UIApplication sharedApplication].delegate;
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         FIRStorageReference *photoImagesRef = [storageRef child:[NSString stringWithFormat:@"users photo/%@/photo.jpg", [Request currentUserUid]] ];
         NSData *imageData = UIImagePNGRepresentation(image);
